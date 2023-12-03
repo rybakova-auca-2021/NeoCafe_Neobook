@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.MainActivity
@@ -45,6 +46,20 @@ class MainPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupNavigation()
+        setupAdapters()
+        getProducts()
+        getPromotions()
+        getBranches()
+    }
+
+    private fun setupNavigation() {
+        binding.btnAllPromotions.setOnClickListener {
+            findNavController().navigate(R.id.action_mainPageFragment_to_allPromotionsFragment)
+        }
+    }
+
+    private fun setupAdapters() {
         adapter = PopularMainAdapter(emptyList())
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
@@ -56,10 +71,6 @@ class MainPageFragment : Fragment() {
         branchAdapter = BranchesMainAdapter(emptyList())
         branchRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         branchRV.adapter = branchAdapter
-
-        getProducts()
-        getPromotions()
-        getBranches()
     }
 
     private fun getProducts() {

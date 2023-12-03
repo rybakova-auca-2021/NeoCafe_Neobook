@@ -9,7 +9,11 @@
         android:id="@+id/mainPageFragment"
         android:name="com.example.neocafe.view.mainPage.MainPageFragment"
         android:label="fragment_main_page"
-        tools:layout="@layout/fragment_main_page" />
+        tools:layout="@layout/fragment_main_page" >
+        <action
+            android:id="@+id/action_mainPageFragment_to_allPromotionsFragment"
+            app:destination="@id/allPromotionsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/menuFragment"
         android:name="com.example.neocafe.view.menu.MenuFragment"
@@ -25,4 +29,25 @@
         android:name="com.example.neocafe.view.info.InfoFragment"
         android:label="fragment_info"
         tools:layout="@layout/fragment_info" />
+    <fragment
+        android:id="@+id/allPromotionsFragment"
+        android:name="com.example.neocafe.view.mainPage.AllPromotionsFragment"
+        android:label="fragment_all_promotions"
+        tools:layout="@layout/fragment_all_promotions" >
+        <action
+            android:id="@+id/action_allPromotionsFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
+        <action
+            android:id="@+id/action_allPromotionsFragment_to_detailPromotionFragment"
+            app:destination="@id/detailPromotionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailPromotionFragment"
+        android:name="com.example.neocafe.view.mainPage.DetailPromotionFragment"
+        android:label="fragment_detail_promotion"
+        tools:layout="@layout/fragment_detail_promotion" >
+        <action
+            android:id="@+id/action_detailPromotionFragment_to_allPromotionsFragment"
+            app:destination="@id/allPromotionsFragment" />
+    </fragment>
 </navigation>

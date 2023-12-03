@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btn_main"
+        android:icon="@drawable/home_03"
+        android:title="Главная" />
+    <item
+        android:id="@+id/btn_menu"
+        android:icon="@drawable/menu_icon"
+        android:title="Меню" />
+    <item
+        android:id="@+id/btn_basket"
+        android:icon="@drawable/bag_03"
+        android:title="Корзина" />
+    <item
+        android:id="@+id/btn_info"
+        android:icon="@drawable/info_icon"
+        android:title="Инфо" />
+</menu>

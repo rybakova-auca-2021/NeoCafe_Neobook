@@ -4,5 +4,12 @@
         <item name="android:statusBarColor">@color/white</item>
     </style>
 
+    <style name="BottomNavStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="itemIconTint">@color/color_selector</item>
+        <item name="itemTextColor">@color/color_selector</item>
+        <item name="fontFamily">@font/montserrat_medium</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
     <style name="Theme.NeoCafe" parent="Base.Theme.NeoCafe" />
 </resources>

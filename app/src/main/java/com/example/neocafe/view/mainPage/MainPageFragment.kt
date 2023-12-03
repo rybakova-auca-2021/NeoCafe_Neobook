@@ -11,14 +11,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.adapters.PopularMainAdapter
+import com.example.neocafe.adapters.PromotionsMainAdapter
 import com.example.neocafe.databinding.FragmentMainPageBinding
 import com.example.neocafe.viewModel.GetProductsViewModel
+import com.example.neocafe.viewModel.GetPromotionsViewModel
 
 class MainPageFragment : Fragment() {
     private lateinit var binding: FragmentMainPageBinding
     private lateinit var recyclerView: RecyclerView
+    private lateinit var promotionRV: RecyclerView
     private lateinit var adapter: PopularMainAdapter
+    private lateinit var promotionAdapter: PromotionsMainAdapter
     private val viewModel: GetProductsViewModel by viewModels()
+    private val promotionViewModel: GetPromotionsViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -27,6 +32,7 @@ class MainPageFragment : Fragment() {
     ): View {
         binding = FragmentMainPageBinding.inflate(inflater, container, false)
         recyclerView = binding.rvPopular
+        promotionRV = binding.rvSales
         (requireActivity() as MainActivity).showBtmNav()
         return binding.root
     }
@@ -37,7 +43,12 @@ class MainPageFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
 
+        promotionAdapter = PromotionsMainAdapter(emptyList())
+        promotionRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        promotionRV.adapter = promotionAdapter
+
         getProducts()
+        getPromotions()
     }
 
     private fun getProducts() {
@@ -46,4 +57,9 @@ class MainPageFragment : Fragment() {
         }
     }
 
+    private fun getPromotions() {
+        promotionViewModel.getAllPromotions() {
+                promotion -> promotionAdapter.updateData(promotion)
+        }
+    }
 }

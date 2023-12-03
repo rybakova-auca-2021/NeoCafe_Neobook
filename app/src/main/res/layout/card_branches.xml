@@ -19,14 +19,14 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/branch_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/image_branch" />
+                app:srcCompat="@drawable/image_branch" />
 
             <TextView
                 android:id="@+id/branch_title"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/branch_img"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="ФМ Технопарк" />
 
@@ -55,7 +55,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/branch_img"
                 app:srcCompat="@drawable/clock_icon" />
 
             <TextView

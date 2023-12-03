@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.MainActivity
 import com.example.neocafe.R
+import com.example.neocafe.adapters.BranchesMainAdapter
 import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.adapters.PromotionsMainAdapter
 import com.example.neocafe.databinding.FragmentMainPageBinding
+import com.example.neocafe.viewModel.GetBranchesViewModel
 import com.example.neocafe.viewModel.GetProductsViewModel
 import com.example.neocafe.viewModel.GetPromotionsViewModel
 
@@ -20,10 +22,13 @@ class MainPageFragment : Fragment() {
     private lateinit var binding: FragmentMainPageBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var promotionRV: RecyclerView
+    private lateinit var branchRV: RecyclerView
     private lateinit var adapter: PopularMainAdapter
     private lateinit var promotionAdapter: PromotionsMainAdapter
+    private lateinit var branchAdapter: BranchesMainAdapter
     private val viewModel: GetProductsViewModel by viewModels()
     private val promotionViewModel: GetPromotionsViewModel by viewModels()
+    private val branchViewModel: GetBranchesViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -33,6 +38,7 @@ class MainPageFragment : Fragment() {
         binding = FragmentMainPageBinding.inflate(inflater, container, false)
         recyclerView = binding.rvPopular
         promotionRV = binding.rvSales
+        branchRV = binding.branchesRecyclerView
         (requireActivity() as MainActivity).showBtmNav()
         return binding.root
     }
@@ -47,8 +53,13 @@ class MainPageFragment : Fragment() {
         promotionRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         promotionRV.adapter = promotionAdapter
 
+        branchAdapter = BranchesMainAdapter(emptyList())
+        branchRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        branchRV.adapter = branchAdapter
+
         getProducts()
         getPromotions()
+        getBranches()
     }
 
     private fun getProducts() {
@@ -60,6 +71,12 @@ class MainPageFragment : Fragment() {
     private fun getPromotions() {
         promotionViewModel.getAllPromotions() {
                 promotion -> promotionAdapter.updateData(promotion)
+        }
+    }
+
+    private fun getBranches() {
+        branchViewModel.getAllBranches() {
+                branch -> branchAdapter.updateData(branch)
         }
     }
 }

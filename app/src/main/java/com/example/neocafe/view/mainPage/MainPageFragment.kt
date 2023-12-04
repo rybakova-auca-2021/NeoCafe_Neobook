@@ -57,6 +57,9 @@ class MainPageFragment : Fragment() {
         binding.btnAllPromotions.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_allPromotionsFragment)
         }
+        binding.btnQrCode.setOnClickListener{
+            findNavController().navigate(R.id.action_mainPageFragment_to_profileFragment)
+        }
     }
 
     private fun setupAdapters() {

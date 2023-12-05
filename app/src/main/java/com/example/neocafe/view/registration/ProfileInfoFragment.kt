@@ -1,6 +1,7 @@
 package com.example.neocafe.view.registration
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -19,9 +20,14 @@ import com.example.neocafe.R
 import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentProfileInfoBinding
 import com.example.neocafe.viewModel.GetProfileInfoViewModel
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ProfileInfoFragment : Fragment() {
     private lateinit var binding: FragmentProfileInfoBinding
+    private var selectedDate: String? = null
     private val viewModel: GetProfileInfoViewModel by viewModels()
 
     override fun onCreateView(
@@ -41,6 +47,9 @@ class ProfileInfoFragment : Fragment() {
     }
 
     private fun setupNavigation() {
+        binding.etBirth.setOnClickListener {
+            showDatePicker()
+        }
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.mainPageFragment)
         }
@@ -83,11 +92,54 @@ class ProfileInfoFragment : Fragment() {
 
                 binding.etName.text = nameEditable
                 binding.etPhone.text = phoneEditable
-                binding.etBirth.text = birthEditable
                 binding.etMail.text = emailEditable
+
+                selectedDate = birth
+                binding.etBirth.text = birthEditable
             }
         }
     }
+
+    private fun showDatePicker() {
+        val currentDate = selectedDate?.toDate() ?: Calendar.getInstance().timeInMillis
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = currentDate
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            R.style.MyDatePickerStyle,
+            { _, year, monthOfYear, dayOfMonth ->
+                val selectedCalendar = Calendar.getInstance()
+                selectedCalendar.set(year, monthOfYear, dayOfMonth)
+                selectedDate = selectedCalendar.timeInMillis.toString()
+
+                val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedCalendar.time)
+                binding.etBirth.text = Editable.Factory.getInstance().newEditable(formattedDate)
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.show()
+    }
+
+
+
+    fun String.toDate(): Long {
+        try {
+            val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val date = sdf.parse(this)
+            return date?.time ?: 0
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            return 0
+        }
+    }
+
 
 
     private fun setupValidation() {

@@ -11,5 +11,12 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="MyDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/main_orange</item>
+        <item name="colorControlHighlight">@color/main_orange</item>
+        <item name="colorControlActivated">@color/main_orange</item>
+
+    </style>
+
     <style name="Theme.NeoCafe" parent="Base.Theme.NeoCafe" />
 </resources>

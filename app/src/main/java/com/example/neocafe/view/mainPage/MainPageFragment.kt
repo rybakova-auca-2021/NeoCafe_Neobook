@@ -60,6 +60,9 @@ class MainPageFragment : Fragment() {
         binding.btnQrCode.setOnClickListener{
             findNavController().navigate(R.id.action_mainPageFragment_to_profileFragment)
         }
+        binding.btnProfile.setOnClickListener {
+            findNavController().navigate(R.id.profileInfoFragment)
+        }
     }
 
     private fun setupAdapters() {

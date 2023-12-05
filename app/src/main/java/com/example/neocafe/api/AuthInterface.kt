@@ -35,7 +35,7 @@ interface AuthInterface {
     fun userInfo(@Header("Authorization") token: String) : Call<UserProfile>
 
     @GET("users/bonus-card/")
-    fun userBonusCard(@Body request: Bonus) : Call<Bonus>
+    fun userBonusCard(@Header("Authorization") token: String) : Call<Bonus>
 
     @PUT("users/profile/update/")
     fun userProfileUpdate(@Header("Authorization") token: String, @Body request: UserProfileUpdate) : Call<UserProfile>

@@ -15,6 +15,7 @@ import com.example.neocafe.adapters.BranchesMainAdapter
 import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.adapters.PromotionsMainAdapter
 import com.example.neocafe.databinding.FragmentMainPageBinding
+import com.example.neocafe.viewModel.BonusesViewModel
 import com.example.neocafe.viewModel.GetBranchesViewModel
 import com.example.neocafe.viewModel.GetProductsViewModel
 import com.example.neocafe.viewModel.GetPromotionsViewModel
@@ -30,6 +31,7 @@ class MainPageFragment : Fragment() {
     private val viewModel: GetProductsViewModel by viewModels()
     private val promotionViewModel: GetPromotionsViewModel by viewModels()
     private val branchViewModel: GetBranchesViewModel by viewModels()
+    private val bonusesViewModel: BonusesViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -51,6 +53,7 @@ class MainPageFragment : Fragment() {
         getProducts()
         getPromotions()
         getBranches()
+        getBonuses()
     }
 
     private fun setupNavigation() {
@@ -95,5 +98,13 @@ class MainPageFragment : Fragment() {
         branchViewModel.getAllBranches() {
                 branch -> branchAdapter.updateData(branch)
         }
+    }
+
+    private fun getBonuses() {
+        bonusesViewModel.getBonusesAmount(
+            onSuccess = { bonus ->
+                binding.numOfBonuses.text = bonus.amount
+            }
+        )
     }
 }

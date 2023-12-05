@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,25 +43,39 @@ class SendCodeFragment : BottomSheetDialogFragment() {
 
     private fun setupNavigation(userId: String) {
         binding.imageView5.setOnClickListener {
-            findNavController().navigate(com.example.neocafe.R.id.profileFragment)
+            navigateToProfileFragment()
         }
         binding.btnSendCode.setOnClickListener {
             checkCode(userId)
         }
     }
 
+    private fun navigateToProfileFragment() {
+        findNavController().navigate(R.id.profileFragment)
+        dismiss() // Dismiss the fragment after navigating
+    }
+
     private fun checkCode(userId: String) {
         val code = binding.pinview.text.toString()
         viewModel.checkCode(code, userId,
             onSuccess = {
-                dismiss()
-                findNavController().navigate(R.id.profileInfoFragment)
+                navigateToProfileInfoFragment()
             },
             onError = {
-                binding.pinview.setTextColor(resources.getColor(R.color.main_orange));
-                binding.wrongCodeMsg.visibility = View.VISIBLE
+                handleCheckCodeError()
             }
         )
+    }
+
+    private fun navigateToProfileInfoFragment() {
+        findNavController().navigate(R.id.profileInfoFragment)
+        dismiss() // Dismiss the fragment after navigating
+    }
+
+    private fun handleCheckCodeError() {
+        binding.pinview.setTextColor(resources.getColor(R.color.main_orange))
+        binding.wrongCodeMsg.visibility = View.VISIBLE
+        dismiss() // Dismiss the fragment after handling the error
     }
 
     private fun setupValidation() {
@@ -91,17 +104,28 @@ class SendCodeFragment : BottomSheetDialogFragment() {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 timeRemaining = millisUntilFinished
-                binding.time.text = "${millisUntilFinished / 1000} сек"
+                if (isAdded) {
+                    binding.time.text = "${millisUntilFinished / 1000} сек"
+                }
             }
 
             @SuppressLint("ResourceAsColor")
             override fun onFinish() {
                 timeRemaining = 0
-                binding.btnSendCode.isEnabled = true
-                binding.btnSendCode.setTextColor(resources.getColor(R.color.white));
+                if (isAdded) {
+                    binding.btnSendCode.isEnabled = true
+                    binding.btnSendCode.setTextColor(requireContext().resources.getColor(R.color.white))
+                }
             }
         }
 
         countDownTimer?.start()
     }
+
+
+    override fun onDestroyView() {
+        countDownTimer?.cancel()
+        super.onDestroyView()
+    }
+
 }

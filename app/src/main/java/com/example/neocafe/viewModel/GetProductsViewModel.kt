@@ -38,6 +38,14 @@ class GetProductsViewModel : ViewModel() {
             .enqueue(getCallback(onSuccess))
     }
 
+    fun getProductsByLimit(
+        limit: Int,
+        onSuccess: (List<Product>) -> Unit
+    ) {
+        apiInterface.getProducts(limit = limit)
+            .enqueue(getCallback(onSuccess))
+    }
+
     // Function without search or category parameters
     fun getAllProducts(
         onSuccess: (List<Product>) -> Unit

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.databinding.FragmentProfileBinding
 import com.example.neocafe.view.auth.LoginFragment
@@ -18,6 +19,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
+        (requireActivity() as MainActivity).hideBtmNav()
         return binding.root
     }
 

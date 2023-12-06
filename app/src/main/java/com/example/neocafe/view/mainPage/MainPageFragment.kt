@@ -84,7 +84,9 @@ class MainPageFragment : Fragment() {
 
     private fun getProducts() {
         viewModel.getAllProducts() {
-                product -> adapter.updateData(product)
+                product ->
+            val firstFourProducts = product.take(4)
+            adapter.updateData(firstFourProducts)
         }
     }
 
@@ -96,7 +98,9 @@ class MainPageFragment : Fragment() {
 
     private fun getBranches() {
         branchViewModel.getAllBranches() {
-                branch -> branchAdapter.updateData(branch)
+                branch ->
+            val firstFourBranches = branch.take(4)
+            branchAdapter.updateData(firstFourBranches)
         }
     }
 

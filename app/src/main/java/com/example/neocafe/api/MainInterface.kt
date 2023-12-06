@@ -23,6 +23,7 @@ interface MainInterface {
         @Query("category_name") category: String? = null,
         @Query("ordering") ordering: String? = null,
         @Query("search") search: String? = null,
+        @Query("limit") limit: Int? = null
     ): Call<List<Product>>
 
     @GET("products/{id}/")

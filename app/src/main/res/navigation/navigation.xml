@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_allBranchesFragment"
+            app:destination="@id/allBranchesFragment" />
     </fragment>
     <fragment
         android:id="@+id/menuFragment"
@@ -94,5 +97,14 @@
         <action
             android:id="@+id/action_profileInfoFragment_to_sendCodeFragment"
             app:destination="@id/sendCodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allBranchesFragment"
+        android:name="com.example.neocafe.view.mainPage.AllBranchesFragment"
+        android:label="fragment_all_branches"
+        tools:layout="@layout/fragment_all_branches" >
+        <action
+            android:id="@+id/action_allBranchesFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
     </fragment>
 </navigation>

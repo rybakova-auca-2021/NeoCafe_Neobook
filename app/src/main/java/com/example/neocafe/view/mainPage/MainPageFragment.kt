@@ -66,6 +66,9 @@ class MainPageFragment : Fragment() {
         binding.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.profileInfoFragment)
         }
+        binding.btnAllBranches.setOnClickListener {
+            findNavController().navigate(R.id.action_mainPageFragment_to_allBranchesFragment)
+        }
     }
 
     private fun setupAdapters() {

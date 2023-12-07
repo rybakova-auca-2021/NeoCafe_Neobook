@@ -2,12 +2,14 @@ package com.example.neocafe.model
 
 data class RegisterUser(
     val first_name: String,
-    val phone: String
+    val phone: String,
+    val qr_code: String
 )
 
 data class RegisterUserResponse(
     val message: String,
-    val user: User
+    val user: User,
+    val qr_code: String
 )
 
 data class User(

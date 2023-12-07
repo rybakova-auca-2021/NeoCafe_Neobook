@@ -16,5 +16,6 @@ data class UserProfileUpdate(
 
 data class Bonus(
     val user: Int,
-    val amount: String
+    val amount: String,
+    val qr_code: String
 )

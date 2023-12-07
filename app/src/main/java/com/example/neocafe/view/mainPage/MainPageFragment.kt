@@ -14,7 +14,9 @@ import com.example.neocafe.R
 import com.example.neocafe.adapters.BranchesMainAdapter
 import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.adapters.PromotionsMainAdapter
+import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentMainPageBinding
+import com.example.neocafe.view.registration.RegisterFragment
 import com.example.neocafe.viewModel.BonusesViewModel
 import com.example.neocafe.viewModel.GetBranchesViewModel
 import com.example.neocafe.viewModel.GetProductsViewModel
@@ -61,7 +63,12 @@ class MainPageFragment : Fragment() {
             findNavController().navigate(R.id.action_mainPageFragment_to_allPromotionsFragment)
         }
         binding.btnQrCode.setOnClickListener{
-            findNavController().navigate(R.id.action_mainPageFragment_to_profileFragment)
+            if (Utils.access == null) {
+                findNavController().navigate(R.id.action_mainPageFragment_to_profileFragment)
+            } else {
+                val bottomSheetFragment = QRCodePageFragment()
+                bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+            }
         }
         binding.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.profileInfoFragment)

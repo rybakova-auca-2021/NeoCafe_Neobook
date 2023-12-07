@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.neocafe.R
+import com.example.neocafe.constants.QRCodeUtils
 import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentRegisterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -76,17 +77,26 @@ class RegisterFragment : BottomSheetDialogFragment() {
         val name = binding.etName.text.toString()
         val phone = binding.etPhone.text.toString()
 
-        viewModel.register(name, phone,
-            onSuccess = {
-                dismiss()
-                val bottomSheetFragment = SendCodeFragment()
-                bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
-            },
-            onError = {
-                binding.phoneErrorMsg.visibility = View.VISIBLE
-                binding.etPhone.setTextColor(resources.getColor(R.color.main_orange));
-            }
-        )
-    }
 
+        val qrCodeData = "QR Code for registration"
+        val qrCodeBitmap = QRCodeUtils.textToImageEncode(qrCodeData, 400)
+
+        println("qrCodeBitmap: $qrCodeBitmap")
+
+        if (qrCodeBitmap != null) {
+            val imagePath = QRCodeUtils.saveImage(requireContext(), qrCodeBitmap)
+            println("qrCodeImage: $imagePath")
+            viewModel.register(requireContext(), name, phone, imagePath,
+                onSuccess = {
+                    dismiss()
+                    val bottomSheetFragment = SendCodeFragment()
+                    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+                },
+                onError = {
+                    binding.phoneErrorMsg.visibility = View.VISIBLE
+                    binding.etPhone.setTextColor(resources.getColor(R.color.main_orange));
+                }
+            )
+        }
+    }
 }

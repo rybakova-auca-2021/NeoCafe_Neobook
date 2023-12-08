@@ -79,24 +79,27 @@ class RegisterFragment : BottomSheetDialogFragment() {
 
 
         val qrCodeData = "QR Code for registration"
-        val qrCodeBitmap = QRCodeUtils.textToImageEncode(qrCodeData, 400)
+        val qrCodeBitmap = QRCodeUtils.textToImageEncode(qrCodeData, 200)
 
         println("qrCodeBitmap: $qrCodeBitmap")
 
         if (qrCodeBitmap != null) {
-            val imagePath = QRCodeUtils.saveImage(requireContext(), qrCodeBitmap)
-            println("qrCodeImage: $imagePath")
-            viewModel.register(requireContext(), name, phone, imagePath,
-                onSuccess = {
-                    dismiss()
-                    val bottomSheetFragment = SendCodeFragment()
-                    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
-                },
-                onError = {
-                    binding.phoneErrorMsg.visibility = View.VISIBLE
-                    binding.etPhone.setTextColor(resources.getColor(R.color.main_orange));
-                }
-            )
+            // Save QR code locally
+            val qrCodeImagePath = QRCodeUtils.saveImage(requireContext(), qrCodeBitmap)
+            if (qrCodeImagePath.isNotEmpty()) {
+                // Continue with registration
+                viewModel.register(name, phone, qrCodeImagePath,
+                    onSuccess = {
+                        dismiss()
+                        val bottomSheetFragment = SendCodeFragment()
+                        bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+                    },
+                    onError = {
+                        binding.phoneErrorMsg.visibility = View.VISIBLE
+                        binding.etPhone.setTextColor(resources.getColor(R.color.main_orange))
+                    }
+                )
+            }
         }
     }
 }

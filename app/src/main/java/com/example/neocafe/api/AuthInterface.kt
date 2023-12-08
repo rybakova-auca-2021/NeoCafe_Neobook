@@ -23,12 +23,17 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface AuthInterface {
-    @Multipart
+//    @Multipart
+//    @POST("users/register/")
+//    fun registerUser(
+//        @Part("first_name") name: RequestBody,
+//        @Part("phone") phone: RequestBody,
+//        @Part qr_code: MultipartBody.Part?,
+//    ) : Call<RegisterUserResponse>
+
     @POST("users/register/")
     fun registerUser(
-        @Part("first_name") name: RequestBody,
-        @Part("phone") phone: RequestBody,
-        @Part qr_code: MultipartBody.Part?,
+        @Body request: RegisterUser
     ) : Call<RegisterUserResponse>
 
     @POST("users/register-with-phone/")

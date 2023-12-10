@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.neocafe.R
 import com.example.neocafe.adapters.ViewPagerAdapter
 import com.example.neocafe.databinding.FragmentAllBranchesBinding
@@ -38,7 +39,9 @@ class AllBranchesFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        // Implement your navigation setup here
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.mainPageFragment)
+        }
     }
 }
 

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_allBranchesFragment"
             app:destination="@id/allBranchesFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_popularPageFragment"
+            app:destination="@id/popularPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/menuFragment"
@@ -131,5 +134,14 @@
         <action
             android:id="@+id/action_answerFragment_to_infoFragment"
             app:destination="@id/infoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/popularPageFragment"
+        android:name="com.example.neocafe.view.mainPage.PopularPageFragment"
+        android:label="fragment_popular_page"
+        tools:layout="@layout/fragment_popular_page" >
+        <action
+            android:id="@+id/action_popularPageFragment_to_mainPageFragment"
+            app:destination="@id/mainPageFragment" />
     </fragment>
 </navigation>

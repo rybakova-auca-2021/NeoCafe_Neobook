@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -75,6 +76,9 @@ class MainPageFragment : Fragment() {
         }
         binding.btnAllBranches.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_allBranchesFragment)
+        }
+        binding.btnAllPopular.setOnClickListener {
+            findNavController().navigate(R.id.action_mainPageFragment_to_popularPageFragment)
         }
     }
 

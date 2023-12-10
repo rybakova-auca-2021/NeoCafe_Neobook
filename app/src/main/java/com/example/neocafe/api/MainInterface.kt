@@ -16,7 +16,12 @@ interface MainInterface {
     fun getBranches(): Call<List<Branch>>
 
     @GET("product-categories/")
-    fun getProductCategory(): Call<ProductCategory>
+    fun getProductCategory(): Call<List<ProductCategory>>
+
+    @GET("popular-products/")
+    fun getPopularProducts(
+        @Query("search") search: String? = null
+    ): Call<List<Product>>
 
     @GET("products/")
     fun getProducts(

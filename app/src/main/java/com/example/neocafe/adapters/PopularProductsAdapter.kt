@@ -1,23 +1,31 @@
 package com.example.neocafe.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.example.neocafe.R
+import com.example.neocafe.databinding.CardPopularItemsBinding
 import com.example.neocafe.model.Product
 import com.example.neocafe.model.ProductCategory
 
 class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_HEADER = 0
     private val VIEW_TYPE_PRODUCT = 1
+
+    private var itemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(product: Product)
+        fun onAddClick(product: Product)
+    }
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
@@ -28,19 +36,19 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
-                HeaderViewHolder(view)
+                val binding = CardPopularItemsBinding.inflate(inflater, parent, false)
+                HeaderViewHolder(binding)
             }
             VIEW_TYPE_PRODUCT -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.card_popular_items, parent, false)
-                ProductViewHolder(view)
+                val binding = CardPopularItemsBinding.inflate(inflater, parent, false)
+                ProductViewHolder(binding)
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
-
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
@@ -59,7 +67,7 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
 
     fun updateData(newList: List<Any>) {
         val diffResult = DiffUtil.calculateDiff(
-            PopularProductsAdapter.ProductDiffCallback(
+            ProductDiffCallback(
                 items,
                 newList
             )
@@ -68,22 +76,33 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
         diffResult.dispatchUpdatesTo(this)
     }
 
-
-    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val headerTextView: TextView = itemView.findViewById(R.id.popular_header)
-
+    inner class HeaderViewHolder(private val binding: CardPopularItemsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(sectionHeader: ProductCategory) {
-            headerTextView.text = sectionHeader.name
+            binding.popularCardTitle.text = sectionHeader.name
         }
     }
 
-    class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val productTitleTextView: TextView = itemView.findViewById(R.id.popular_card_title)
-        private val productImageView: ImageView = itemView.findViewById(R.id.popular_card_image)
-        private val productPriceView: TextView = itemView.findViewById(R.id.popular_item_price)
+    inner class ProductViewHolder(private val binding: CardPopularItemsBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val clickedItem = items[position]
+                    (clickedItem as? Product)?.let { itemClickListener?.onItemClick(it) }
+                }
+            }
+
+            binding.btnAdd.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val clickedItem = items[position]
+                    (clickedItem as? Product)?.let { itemClickListener?.onAddClick(it) }
+                }
+            }
+        }
 
         fun bind(product: Product) {
-            productTitleTextView.text = product.title
+            binding.popularCardTitle.text = product.title
             Glide.with(itemView.context)
                 .load(product.image)
                 .apply(
@@ -92,9 +111,8 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
                         RoundedCorners(10) // Set the corner radius in pixels
                     )
                 )
-                .into(productImageView)
-            productPriceView.text = "${product.price} c"
-
+                .into(binding.popularCardImage)
+            binding.popularItemPrice.text = "${product.price} c"
         }
     }
 

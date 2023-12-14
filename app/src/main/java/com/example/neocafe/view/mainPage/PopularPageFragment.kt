@@ -17,6 +17,7 @@ import com.example.neocafe.adapters.CategoriesAdapter
 import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.adapters.PopularProductsAdapter
 import com.example.neocafe.databinding.FragmentPopularPageBinding
+import com.example.neocafe.model.Product
 import com.example.neocafe.model.ProductCategory
 import com.example.neocafe.viewModel.GetCategoriesViewModel
 import com.example.neocafe.viewModel.GetPopularProductsViewModel
@@ -68,6 +69,16 @@ class PopularPageFragment : Fragment() {
                     productsAdapter.updateData(items)
                     binding.rvItems.visibility = View.VISIBLE
                 }
+            }
+        })
+
+        productsAdapter.setOnItemClickListener(object : PopularProductsAdapter.OnItemClickListener {
+            override fun onItemClick(product: Product) {
+                // TODO
+            }
+
+            override fun onAddClick(product: Product) {
+
             }
         })
     }

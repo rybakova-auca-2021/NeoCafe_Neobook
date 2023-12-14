@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    tools:context=".view.basket.unregisteredUser.OrderPaymentFragment">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar4"
+                android:layout_width="455dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/arrow_back"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/order_payment_text"
+                style="@style/TextStyle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Оплата заказов"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView8"
+                android:layout_width="0dp"
+                android:layout_height="240dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar4">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/getting_type"
+                        style="@style/TitleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Способ получения"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imageView18"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/clock_icon"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/delivery_time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/montserrat"
+                        android:text="Доставка 30-40 минут"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView18"
+                        app:layout_constraintStart_toEndOf="@+id/imageView18"
+                        app:layout_constraintTop_toTopOf="@+id/imageView18" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_delivery"
+                        android:layout_width="100dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:backgroundTint="@color/light_grey"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintBottom_toTopOf="@+id/delivery_time_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/getting_type">
+
+                        <ImageView
+                            android:id="@+id/delivery_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="42dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/delivery_icon_orange" />
+
+                        <TextView
+                            android:id="@+id/delivery_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="60dp"
+                            android:text="Доставка"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/delivery_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="80dp"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:text="120 c"
+                            android:textColor="@color/main_orange" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_self_pickup"
+                        android:layout_width="100dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:backgroundTint="@color/white"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintBottom_toTopOf="@+id/delivery_time_text"
+                        app:layout_constraintStart_toEndOf="@+id/card_delivery"
+                        app:layout_constraintTop_toBottomOf="@+id/getting_type">
+
+                        <ImageView
+                            android:id="@+id/pickup_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="42dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/branch_icon" />
+
+                        <TextView
+                            android:id="@+id/pickup_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="60dp"
+                            android:text="Самовывоз"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/pickup_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="80dp"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:text="0 c"
+                            android:textColor="@color/grey" />
+                    </androidx.cardview.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView8">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="24dp">
+
+                    <TextView
+                        android:id="@+id/where_text"
+                        style="@style/TitleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Куда"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/et_address"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ems="10"
+                        android:hint="Адрес*"
+                        android:inputType="text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/where_text"
+                        app:layout_constraintTop_toBottomOf="@+id/where_text"
+                        tools:layout_marginLeft="16dp" />
+
+                    <EditText
+                        android:id="@+id/et_phone"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ems="10"
+                        android:hint="Телефон*"
+                        android:inputType="phone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/where_text"
+                        app:layout_constraintTop_toBottomOf="@+id/et_entrance"
+                        tools:layout_marginLeft="16dp" />
+
+                    <EditText
+                        android:id="@+id/et_comment"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:ems="10"
+                        android:hint="Комментарий к курьеру"
+                        android:inputType="phone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/where_text"
+                        app:layout_constraintTop_toBottomOf="@+id/et_phone"
+                        tools:layout_marginLeft="16dp" />
+
+                    <EditText
+                        android:id="@+id/et_apartment"
+                        style="@style/EditTextStyle"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:ems="10"
+                        android:hint="кв/офис"
+                        android:inputType="number"
+                        app:layout_constraintStart_toStartOf="@+id/et_address"
+                        app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
+                    <EditText
+                        android:id="@+id/et_entrance"
+                        style="@style/EditTextStyle"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:ems="10"
+                        android:hint="Подъезд"
+                        android:inputType="number"
+                        app:layout_constraintStart_toStartOf="@+id/et_address"
+                        app:layout_constraintTop_toBottomOf="@+id/et_apartment" />
+
+                    <EditText
+                        android:id="@+id/et_code"
+                        style="@style/EditTextStyle"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:ems="10"
+                        android:hint="Код домофона"
+                        android:inputType="number"
+                        app:layout_constraintEnd_toEndOf="@+id/et_address"
+                        app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
+                    <EditText
+                        android:id="@+id/et_floor"
+                        style="@style/EditTextStyle"
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:ems="10"
+                        android:hint="Этаж"
+                        android:inputType="number"
+                        app:layout_constraintEnd_toEndOf="@+id/et_address"
+                        app:layout_constraintTop_toBottomOf="@+id/et_code" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView9">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/bonuses_text"
+                        style="@style/TitleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Бонусы и промокоды"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/et_promocode"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:ems="10"
+                        android:hint="Введите промокод"
+                        android:inputType="text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/bonuses_text"
+                        app:layout_constraintTop_toBottomOf="@+id/bonuses_text" />
+
+                    <EditText
+                        android:id="@+id/et_bonuses"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:ems="10"
+                        android:hint="Использовать бонусы"
+                        android:inputType="text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/bonuses_text"
+                        app:layout_constraintTop_toBottomOf="@+id/et_promocode" />
+
+                    <EditText
+                        android:id="@+id/et_change"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:ems="10"
+                        android:hint="Сдачи с"
+                        android:inputType="number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/bonuses_text"
+                        app:layout_constraintTop_toBottomOf="@+id/et_bonuses" />
+
+                    <ImageView
+                        android:id="@+id/btn_promocode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/chevron_right"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_promocode"
+                        app:layout_constraintEnd_toEndOf="@+id/et_promocode"
+                        app:layout_constraintTop_toTopOf="@+id/et_promocode" />
+
+                    <ImageView
+                        android:id="@+id/btn_promocode2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/chevron_right"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_bonuses"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/et_bonuses" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/total_price"
+                        style="@style/TitleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="1160 c"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="180dp"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/rounded_auth_btn"
+                        android:text="Заказать"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

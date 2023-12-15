@@ -1,4 +1,4 @@
-package com.example.neocafe.view.basket.unregisteredUser
+package com.example.neocafe.view.basket.orderDeliveryOrPickup
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

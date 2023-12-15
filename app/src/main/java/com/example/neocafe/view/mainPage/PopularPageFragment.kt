@@ -19,8 +19,13 @@ import com.example.neocafe.adapters.PopularProductsAdapter
 import com.example.neocafe.databinding.FragmentPopularPageBinding
 import com.example.neocafe.model.Product
 import com.example.neocafe.model.ProductCategory
+import com.example.neocafe.room.MyApplication
+import com.example.neocafe.room.ProductDao
 import com.example.neocafe.viewModel.GetCategoriesViewModel
 import com.example.neocafe.viewModel.GetPopularProductsViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PopularPageFragment : Fragment() {
     private lateinit var binding: FragmentPopularPageBinding
@@ -30,6 +35,9 @@ class PopularPageFragment : Fragment() {
     private lateinit var adapter: CategoriesAdapter
     private val viewModel: GetCategoriesViewModel by viewModels()
     private val itemsViewModel: GetPopularProductsViewModel by viewModels()
+    private val productDao: ProductDao by lazy {
+        (requireActivity().application as MyApplication).database.productDao()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +65,17 @@ class PopularPageFragment : Fragment() {
         recyclerView.adapter = adapter
 
         productsAdapter = PopularProductsAdapter(emptyList())
-        rv_products.layoutManager = GridLayoutManager(requireContext(), 2)
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (productsAdapter.getItemViewType(position)) {
+                    PopularProductsAdapter.VIEW_TYPE_HEADER -> 2 // Full span for headers
+                    PopularProductsAdapter.VIEW_TYPE_PRODUCT -> 1 // Half span for products
+                    else -> 1
+                }
+            }
+        }
+        rv_products.layoutManager = layoutManager
         rv_products.adapter = productsAdapter
 
         adapter.setOnItemClickListener(object : CategoriesAdapter.OnItemClickListener {
@@ -78,7 +96,10 @@ class PopularPageFragment : Fragment() {
             }
 
             override fun onAddClick(product: Product) {
-
+                CoroutineScope(Dispatchers.IO).launch {
+                    val cartItem = com.example.neocafe.room.Product(product.id, product.title, product.category, product.image, product.quantity, product.price)
+                    productDao.insertCartItem(cartItem)
+                }
             }
         })
     }

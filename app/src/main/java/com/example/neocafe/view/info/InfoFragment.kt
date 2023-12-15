@@ -31,7 +31,7 @@ class InfoFragment : Fragment() {
     ): View? {
         binding = FragmentInfoBinding.inflate(inflater, container, false)
         recyclerView = binding.rvInfoCards
-        (requireActivity() as MainActivity).hideBtmNav()
+        (requireActivity() as MainActivity).showBtmNav()
         return binding.root
     }
 

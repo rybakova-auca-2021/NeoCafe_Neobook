@@ -22,6 +22,7 @@ class PopularMainAdapter(private var popularItems: List<Product>) :
 
     interface OnItemClickListener {
         fun onItemClick(product: Product)
+        fun onAddClick(product: Product)
     }
 
 
@@ -60,6 +61,14 @@ class PopularMainAdapter(private var popularItems: List<Product>) :
                 if (position != RecyclerView.NO_POSITION) {
                     val clickedItem = popularItems[position]
                     itemClickListener?.onItemClick(clickedItem)
+                }
+            }
+
+            binding.btnAdd.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val clickedItem = popularItems[position]
+                    (clickedItem as? Product)?.let { itemClickListener?.onAddClick(it) }
                 }
             }
         }

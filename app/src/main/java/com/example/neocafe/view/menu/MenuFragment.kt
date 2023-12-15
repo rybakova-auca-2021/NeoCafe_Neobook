@@ -61,7 +61,18 @@ class MenuFragment : Fragment() {
         recyclerView.adapter = adapter
 
         productsAdapter = PopularProductsAdapter(emptyList())
-        rv_products.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (productsAdapter.getItemViewType(position)) {
+                    PopularProductsAdapter.VIEW_TYPE_HEADER -> 2 // Full span for headers
+                    PopularProductsAdapter.VIEW_TYPE_PRODUCT -> 1 // Half span for products
+                    else -> 1
+                }
+            }
+        }
+        rv_products.layoutManager = layoutManager
         rv_products.adapter = productsAdapter
 
         adapter.setOnItemClickListener(object : CategoriesAdapter.OnItemClickListener {

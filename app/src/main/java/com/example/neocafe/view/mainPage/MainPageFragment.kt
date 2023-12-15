@@ -17,11 +17,17 @@ import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.adapters.PromotionsMainAdapter
 import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentMainPageBinding
+import com.example.neocafe.model.Product
+import com.example.neocafe.room.MyApplication
+import com.example.neocafe.room.ProductDao
 import com.example.neocafe.view.registration.RegisterFragment
 import com.example.neocafe.viewModel.BonusesViewModel
 import com.example.neocafe.viewModel.GetBranchesViewModel
 import com.example.neocafe.viewModel.GetProductsViewModel
 import com.example.neocafe.viewModel.GetPromotionsViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainPageFragment : Fragment() {
     private lateinit var binding: FragmentMainPageBinding
@@ -35,7 +41,9 @@ class MainPageFragment : Fragment() {
     private val promotionViewModel: GetPromotionsViewModel by viewModels()
     private val branchViewModel: GetBranchesViewModel by viewModels()
     private val bonusesViewModel: BonusesViewModel by viewModels()
-
+    private val productDao: ProductDao by lazy {
+        (requireActivity().application as MyApplication).database.productDao()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +65,7 @@ class MainPageFragment : Fragment() {
         getPromotions()
         getBranches()
         getBonuses()
+        setupCart()
     }
 
     private fun setupNavigation() {
@@ -96,6 +105,27 @@ class MainPageFragment : Fragment() {
         branchRV.adapter = branchAdapter
     }
 
+    private fun setupCart() {
+        adapter.setOnItemClickListener(object : PopularMainAdapter.OnItemClickListener {
+            override fun onItemClick(product: Product) {
+                // TODO: Handle item click, if needed.
+            }
+
+            override fun onAddClick(product: Product) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val cartItem = com.example.neocafe.room.Product(
+                        product.id,
+                        product.title,
+                        product.category,
+                        product.image,
+                        product.quantity,
+                        product.price
+                    )
+                    productDao.insertCartItem(cartItem)
+                }
+            }
+        })
+    }
     private fun getProducts() {
         viewModel.getAllProducts() {
                 product ->

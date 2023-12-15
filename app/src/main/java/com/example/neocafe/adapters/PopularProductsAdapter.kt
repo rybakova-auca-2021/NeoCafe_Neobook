@@ -1,6 +1,7 @@
 package com.example.neocafe.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.example.neocafe.databinding.CardItemHeaderBinding
 import com.example.neocafe.databinding.CardPopularItemsBinding
 import com.example.neocafe.model.Product
 import com.example.neocafe.model.ProductCategory
@@ -15,6 +17,11 @@ import com.example.neocafe.model.ProductCategory
 class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_HEADER = 0
     private val VIEW_TYPE_PRODUCT = 1
+
+    companion object {
+        const val VIEW_TYPE_HEADER = 0
+        const val VIEW_TYPE_PRODUCT = 1
+    }
 
     private var itemClickListener: OnItemClickListener? = null
 
@@ -39,7 +46,7 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
-                val binding = CardPopularItemsBinding.inflate(inflater, parent, false)
+                val binding = CardItemHeaderBinding.inflate(inflater, parent, false)
                 HeaderViewHolder(binding)
             }
             VIEW_TYPE_PRODUCT -> {
@@ -76,9 +83,9 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class HeaderViewHolder(private val binding: CardPopularItemsBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class HeaderViewHolder(private val binding: CardItemHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(sectionHeader: ProductCategory) {
-            binding.popularCardTitle.text = sectionHeader.name
+            binding.itemHeader.text = sectionHeader.name
         }
     }
 

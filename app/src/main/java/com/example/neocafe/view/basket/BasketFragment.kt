@@ -5,14 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.neocafe.R
 import com.example.neocafe.adapters.ViewPagerAdapter
 import com.example.neocafe.adapters.ViewPagerAdapterBasket
 import com.example.neocafe.databinding.FragmentBasketBinding
+import com.example.neocafe.room.MyApplication
+import com.example.neocafe.room.ProductDao
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BasketFragment : Fragment() {
     private lateinit var binding: FragmentBasketBinding
+    private val productDao: ProductDao by lazy {
+        (requireActivity().application as MyApplication).database.productDao()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +41,45 @@ class BasketFragment : Fragment() {
                 1 -> tab.text = "Мои заказы"
             }
         }.attach()
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getOrders()
+        setupNavigation()
+    }
+
+    private fun setupNavigation() {
+        binding.btnClear.setOnClickListener {
+            clearBasket()
+        }
+    }
+
+    private fun clearBasket() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val orders = productDao.getAllCartItems()
+
+            if (orders.isNotEmpty()) {
+                productDao.deleteProducts(orders)
+                withContext(Dispatchers.Main) {
+                    binding.btnClear.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun getOrders() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val orders = productDao.getAllCartItems()
+            withContext(Dispatchers.Main) {
+                if (orders.isNotEmpty()) {
+                    binding.btnClear.visibility = View.VISIBLE
+                } else {
+                    binding.btnClear.visibility = View.GONE
+                }
+            }
+        }
     }
 }

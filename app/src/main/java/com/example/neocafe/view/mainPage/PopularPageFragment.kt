@@ -92,7 +92,10 @@ class PopularPageFragment : Fragment() {
 
         productsAdapter.setOnItemClickListener(object : PopularProductsAdapter.OnItemClickListener {
             override fun onItemClick(product: Product) {
-                // TODO
+                val bundle = Bundle()
+                bundle.putInt("id", product.id)
+                bundle.putString("sourceFragment", "popularPageFragment")
+                findNavController().navigate(R.id.action_popularPageFragment_to_detailProductFragment, bundle)
             }
 
             override fun onAddClick(product: Product) {

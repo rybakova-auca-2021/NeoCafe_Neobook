@@ -108,7 +108,10 @@ class MainPageFragment : Fragment() {
     private fun setupCart() {
         adapter.setOnItemClickListener(object : PopularMainAdapter.OnItemClickListener {
             override fun onItemClick(product: Product) {
-                // TODO: Handle item click, if needed.
+                val bundle = Bundle()
+                bundle.putInt("id", product.id)
+                bundle.putString("sourceFragment", "mainPageFragment")
+                findNavController().navigate(R.id.action_mainPageFragment_to_detailProductFragment, bundle)
             }
 
             override fun onAddClick(product: Product) {

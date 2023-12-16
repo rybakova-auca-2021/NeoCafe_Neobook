@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.MainActivity
+import com.example.neocafe.R
 import com.example.neocafe.adapters.CategoriesAdapter
 import com.example.neocafe.adapters.PopularProductsAdapter
 import com.example.neocafe.databinding.FragmentMenuBinding
@@ -89,7 +91,10 @@ class MenuFragment : Fragment() {
 
         productsAdapter.setOnItemClickListener(object : PopularProductsAdapter.OnItemClickListener {
             override fun onItemClick(product: Product) {
-                // TODO
+                val bundle = Bundle()
+                bundle.putInt("id", product.id)
+                bundle.putString("sourceFragment", "menuPageFragment")
+                findNavController().navigate(R.id.action_menuFragment_to_detailProductFragment, bundle)
             }
 
             override fun onAddClick(product: Product) {

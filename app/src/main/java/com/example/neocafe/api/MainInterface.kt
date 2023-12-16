@@ -1,13 +1,19 @@
 package com.example.neocafe.api
 
 import com.example.neocafe.model.Branch
+import com.example.neocafe.model.NotificationRequest
+import com.example.neocafe.model.GetOrder
 import com.example.neocafe.model.Product
 import com.example.neocafe.model.ProductCategory
 import com.example.neocafe.model.ProductDetail
 import com.example.neocafe.model.Promotion
 import com.example.neocafe.model.PromotionDetail
+import com.example.neocafe.model.Question
+import com.example.neocafe.model.QuestionAnswer
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -33,7 +39,7 @@ interface MainInterface {
 
     @GET("products/{id}/")
     fun getProductDetail(
-        @Query("id") id: Int,
+        @Path("id") id: Int,
     ): Call<ProductDetail>
 
     @GET("promotions/")
@@ -43,4 +49,25 @@ interface MainInterface {
     fun getPromotionDetail(
         @Path("id") id: Int,
     ): Call<PromotionDetail>
+
+    @POST("send-notification/")
+    fun sendNotification(
+        @Body request: NotificationRequest
+    ): Call<NotificationRequest>
+
+    @POST("orders/")
+    fun postOrders(
+        @Body request: GetOrder
+    ): Call<List<GetOrder>>
+
+    @GET("orders/")
+    fun getOrders(): Call<List<GetOrder>>
+
+    @GET("question-list/")
+    fun getQuestions() : Call<List<Question>>
+
+    @GET("question-answer/{id}/")
+    fun getQuestionAnswers(
+        @Path("id") id: Int
+    ) : Call<QuestionAnswer>
 }

@@ -1,6 +1,7 @@
 package com.example.neocafe.api
 
 import com.example.neocafe.model.Branch
+import com.example.neocafe.model.DetailOrder
 import com.example.neocafe.model.NotificationRequest
 import com.example.neocafe.model.GetOrder
 import com.example.neocafe.model.Product
@@ -60,8 +61,13 @@ interface MainInterface {
         @Body request: GetOrder
     ): Call<List<GetOrder>>
 
-    @GET("orders/")
+    @GET("my-orders/")
     fun getOrders(): Call<List<GetOrder>>
+
+    @GET("orders/{order_number}/")
+    fun getOrderById(
+        @Path("id") id: Int
+    ): Call<DetailOrder>
 
     @GET("question-list/")
     fun getQuestions() : Call<List<Question>>

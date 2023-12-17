@@ -2,24 +2,30 @@ package com.example.neocafe.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.example.neocafe.api.RetrofitInstance
+import com.example.neocafe.constants.Utils
 import com.example.neocafe.model.GetOrder
+import com.example.neocafe.model.Order
+import com.example.neocafe.model.OrderConfirm
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PostOrderViewModel : ViewModel() {
     private val apiInterface = RetrofitInstance.mainApi
-    fun getMyOrders(
-        order: GetOrder,
-        onSuccess: (List<GetOrder>) -> Unit
+    fun postOrder(
+        order: Order,
+        onSuccess: (OrderConfirm) -> Unit
     ) {
-        apiInterface.postOrders(order)
+        val token = Utils.access
+        val authHeader = "Bearer $token"
+
+        apiInterface.postOrders(authHeader, order)
             .enqueue(getCallback(onSuccess))
     }
 
-    private fun getCallback(onSuccess: (List<GetOrder>) -> Unit): Callback<List<GetOrder>> {
-        return object : Callback<List<GetOrder>> {
-            override fun onResponse(call: Call<List<GetOrder>>, response: Response<List<GetOrder>>) {
+    private fun getCallback(onSuccess: (OrderConfirm) -> Unit): Callback<OrderConfirm> {
+        return object : Callback<OrderConfirm> {
+            override fun onResponse(call: Call<OrderConfirm>, response: Response<OrderConfirm>) {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
@@ -30,7 +36,7 @@ class PostOrderViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<GetOrder>>, t: Throwable) {
+            override fun onFailure(call: Call<OrderConfirm>, t: Throwable) {
                 println("Request failed: ${t.message}")
             }
         }

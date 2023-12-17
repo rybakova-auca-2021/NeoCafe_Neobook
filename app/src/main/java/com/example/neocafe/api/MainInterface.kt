@@ -4,6 +4,8 @@ import com.example.neocafe.model.Branch
 import com.example.neocafe.model.DetailOrder
 import com.example.neocafe.model.NotificationRequest
 import com.example.neocafe.model.GetOrder
+import com.example.neocafe.model.Order
+import com.example.neocafe.model.OrderConfirm
 import com.example.neocafe.model.Product
 import com.example.neocafe.model.ProductCategory
 import com.example.neocafe.model.ProductDetail
@@ -14,6 +16,7 @@ import com.example.neocafe.model.QuestionAnswer
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -58,8 +61,9 @@ interface MainInterface {
 
     @POST("orders/")
     fun postOrders(
-        @Body request: GetOrder
-    ): Call<List<GetOrder>>
+        @Header("Authorization") token: String,
+        @Body request: Order
+    ): Call<OrderConfirm>
 
     @GET("my-orders/")
     fun getOrders(): Call<List<GetOrder>>

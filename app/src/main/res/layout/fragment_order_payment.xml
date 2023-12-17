@@ -10,8 +10,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -262,7 +261,7 @@
                     <EditText
                         android:id="@+id/et_apartment"
                         style="@style/EditTextStyle"
-                        android:layout_width="200dp"
+                        android:layout_width="170dp"
                         android:layout_height="50dp"
                         android:layout_marginTop="16dp"
                         android:ems="10"
@@ -274,7 +273,7 @@
                     <EditText
                         android:id="@+id/et_entrance"
                         style="@style/EditTextStyle"
-                        android:layout_width="200dp"
+                        android:layout_width="170dp"
                         android:layout_height="50dp"
                         android:layout_marginTop="16dp"
                         android:ems="10"
@@ -286,7 +285,7 @@
                     <EditText
                         android:id="@+id/et_code"
                         style="@style/EditTextStyle"
-                        android:layout_width="200dp"
+                        android:layout_width="170dp"
                         android:layout_height="50dp"
                         android:layout_marginTop="16dp"
                         android:ems="10"
@@ -298,7 +297,7 @@
                     <EditText
                         android:id="@+id/et_floor"
                         style="@style/EditTextStyle"
-                        android:layout_width="200dp"
+                        android:layout_width="170dp"
                         android:layout_height="50dp"
                         android:layout_marginTop="16dp"
                         android:ems="10"
@@ -402,7 +401,8 @@
                 android:layout_height="100dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" >
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView10">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -434,8 +434,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

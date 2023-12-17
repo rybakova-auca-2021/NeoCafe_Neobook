@@ -1,19 +1,20 @@
 package com.example.neocafe.view.basket
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.R
-import com.example.neocafe.adapters.CategoriesAdapter
 import com.example.neocafe.adapters.OrdersAdapter
-import com.example.neocafe.databinding.FragmentMyOrdersBinding
 import com.example.neocafe.databinding.FragmentNewOrderBinding
 import com.example.neocafe.room.MyApplication
+import com.example.neocafe.room.Product
 import com.example.neocafe.room.ProductDao
+import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPhoneFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ class NewOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         getOrders()
+        setupNavigation()
     }
 
     private fun setupRecyclerView() {
@@ -49,13 +51,48 @@ class NewOrderFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
+
+    private fun setupNavigation() {
+        binding.btnGoToMenu.setOnClickListener{
+            findNavController().navigate(R.id.menuFragment)
+        }
+        binding.btnNext.setOnClickListener {
+            val bottomSheetFragment = OrderPhoneFragment()
+            bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+        }
+    }
     private fun getOrders() {
         CoroutineScope(Dispatchers.IO).launch {
             val orders = productDao.getAllCartItems()
             withContext(Dispatchers.Main) {
-                adapter.updateData(orders)
+                if (orders.isNotEmpty()) {
+                    adapter.updateData(orders)
+                    val totalPrice = calculateTotalPrice(orders)
+                    binding.basketPrice.text = "$totalPrice c"
+                } else {
+                    showEmptyCartMessage()
+                }
             }
         }
     }
 
+    private fun calculateTotalPrice(orders: List<Product>): Double {
+        var totalPrice = 0.00
+        for (order in orders) {
+            totalPrice += order.price.toDouble()
+        }
+        return totalPrice
+    }
+
+    private fun showEmptyCartMessage() {
+        binding.cardOrder.visibility = View.GONE
+        binding.emptyBacketImg.visibility = View.VISIBLE
+        binding.btnGoToMenu.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getOrders()
+    }
 }

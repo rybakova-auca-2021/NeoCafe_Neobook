@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="328dp"
-        android:layout_height="270dp"
+        android:layout_height="290dp"
         app:cardCornerRadius="10dp"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,21 +23,21 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_confirm_promocode"
+                android:id="@+id/btn_confirm_comment"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/rounded_auth_btn"
                 android:enabled="false"
-                android:text="Применить"
+                android:text="Добавить"
                 android:textAllCaps="false"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/error_msg" />
+                app:layout_constraintTop_toBottomOf="@+id/et_comment" />
 
             <TextView
-                android:id="@+id/btn_cancel_promocode"
+                android:id="@+id/btn_cancel_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -47,40 +47,85 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_confirm_promocode" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_confirm_comment" />
 
             <TextView
                 android:id="@+id/bonuses_text"
                 style="@style/TitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Промокод"
+                android:text="Комментарий нам"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/et_promocode"
+                android:id="@+id/et_comment"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/rounded_et"
                 android:ems="10"
                 android:inputType="text"
+                android:maxLength="50"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bonuses_text" />
 
             <TextView
-                android:id="@+id/error_msg"
+                android:id="@+id/word_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Промокод неактивен"
+                android:text="0/50"
+                android:textColor="@color/grey"
+                android:textSize="16sp"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="@+id/et_comment"
+                app:layout_constraintTop_toBottomOf="@+id/et_comment" />
+
+            <TextView
+                android:id="@+id/error_msg2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Количество бонусов превышает стоимость заказа"
                 android:textColor="@color/main_orange"
                 android:textSize="12sp"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/et_promocode"
-                app:layout_constraintTop_toBottomOf="@+id/et_promocode" />
+                app:layout_constraintEnd_toEndOf="@+id/et_comment"
+                app:layout_constraintStart_toStartOf="@+id/et_comment"
+                app:layout_constraintTop_toBottomOf="@+id/et_comment" />
+
+            <TextView
+                android:id="@+id/bonuses_amount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Имеется"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/et_comment"
+                app:layout_constraintTop_toBottomOf="@+id/et_comment" />
+
+            <TextView
+                android:id="@+id/bonuses_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="100000"
+                android:visibility="gone"
+                android:textColor="@color/main_orange"
+                app:layout_constraintStart_toEndOf="@+id/bonuses_amount_text"
+                app:layout_constraintTop_toTopOf="@+id/bonuses_amount_text" />
+
+            <ImageView
+                android:id="@+id/bonus_img"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/bonuses_amount"
+                app:layout_constraintStart_toEndOf="@+id/bonuses_amount"
+                app:layout_constraintTop_toTopOf="@+id/bonuses_amount"
+                app:srcCompat="@drawable/bonuses_icon_orange" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

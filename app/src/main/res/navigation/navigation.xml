@@ -39,7 +39,11 @@
         android:id="@+id/basketFragment"
         android:name="com.example.neocafe.view.basket.BasketFragment"
         android:label="fragment_basket"
-        tools:layout="@layout/fragment_basket" />
+        tools:layout="@layout/fragment_basket" >
+        <action
+            android:id="@+id/action_basketFragment_to_newOrderFragment"
+            app:destination="@id/newOrderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/infoFragment"
         android:name="com.example.neocafe.view.info.InfoFragment"
@@ -173,4 +177,19 @@
             app:argType="string"
             android:defaultValue="" />
     </fragment>
+    <fragment
+        android:id="@+id/newOrderFragment"
+        android:name="com.example.neocafe.view.basket.NewOrderFragment"
+        android:label="fragment_new_order"
+        tools:layout="@layout/fragment_new_order" />
+    <fragment
+        android:id="@+id/orderPaymentFragment"
+        android:name="com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPaymentFragment"
+        android:label="fragment_order_payment"
+        tools:layout="@layout/fragment_order_payment" />
+    <fragment
+        android:id="@+id/myOrdersFragment"
+        android:name="com.example.neocafe.view.basket.MyOrdersFragment"
+        android:label="fragment_my_orders"
+        tools:layout="@layout/fragment_my_orders" />
 </navigation>

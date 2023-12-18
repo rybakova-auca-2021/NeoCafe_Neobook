@@ -15,6 +15,8 @@ import com.example.neocafe.room.MyApplication
 import com.example.neocafe.room.Product
 import com.example.neocafe.room.ProductDao
 import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPhoneFragment
+import com.example.neocafe.constants.Utils
+import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPaymentFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,8 +59,12 @@ class NewOrderFragment : Fragment() {
             findNavController().navigate(R.id.menuFragment)
         }
         binding.btnNext.setOnClickListener {
-            val bottomSheetFragment = OrderPhoneFragment()
-            bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+            if (Utils.access != null) {
+                findNavController().navigate(R.id.orderPaymentFragment)
+            } else {
+                val bottomSheetFragment = OrderPhoneFragment()
+                bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+            }
         }
     }
     private fun getOrders() {

@@ -1,12 +1,16 @@
 package com.example.neocafe.view.basket.orderDeliveryOrPickup
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.neocafe.MainActivity
+import com.example.neocafe.R
 import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentOrderPaymentBinding
 import com.example.neocafe.model.Order
@@ -43,8 +47,17 @@ class OrderPaymentFragment : Fragment() {
         binding.button.setOnClickListener {
             postOrders()
         }
+        setupPromocodeDialog()
+        setupBonusesDialog()
+        setupCommentDialog()
+        setupNavigation()
     }
 
+    private fun setupNavigation() {
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.basketFragment)
+        }
+    }
 
     private fun postOrders() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -116,4 +129,60 @@ class OrderPaymentFragment : Fragment() {
             bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
         }
     }
+
+    private fun setupPromocodeDialog() {
+        binding.etPromocode.setOnClickListener {
+            val dialog = SetupPromocodeDialog()
+            dialog.setTargetFragment(this, PROMOCODE_REQUEST_CODE)
+            dialog.show(parentFragmentManager, "PromocodeDialog")
+        }
+    }
+
+    private fun setupBonusesDialog() {
+        binding.etBonuses.setOnClickListener {
+            val dialog = SetupBonusesDialog()
+            dialog.setTargetFragment(this, BONUSES_REQUEST_CODE)
+            dialog.show(parentFragmentManager, "BonusesDialog")
+        }
+    }
+
+    private fun setupCommentDialog() {
+        binding.etComment.setOnClickListener {
+            val dialog = SetupCommentDialog()
+            dialog.setTargetFragment(this, COMMENTS_REQUEST_CODE)
+            dialog.show(parentFragmentManager, "CommentsDialog")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            PROMOCODE_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val bonusCode = data?.getStringExtra("bonusCode")
+                    binding.etPromocode.setText(bonusCode)
+                }
+            }
+            BONUSES_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val bonuses = data?.getStringExtra("bonuses")
+                    binding.etBonuses.setText(bonuses)
+                }
+            }
+            COMMENTS_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val comments = data?.getStringExtra("comments")
+                    binding.etComment.setText(comments)
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val PROMOCODE_REQUEST_CODE = 1
+        const val BONUSES_REQUEST_CODE = 2
+        const val COMMENTS_REQUEST_CODE = 3
+    }
+
+
 }

@@ -23,7 +23,7 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_logout"
+                android:id="@+id/btn_confirm_bonus"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="50dp"
@@ -34,10 +34,10 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_promocode" />
+                app:layout_constraintTop_toBottomOf="@+id/et_bonuses" />
 
             <TextView
-                android:id="@+id/btn_cancel"
+                android:id="@+id/btn_cancel_bonus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -47,7 +47,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_logout" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_confirm_bonus" />
 
             <TextView
                 android:id="@+id/bonuses_text"
@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/et_promocode"
+                android:id="@+id/et_bonuses"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="24dp"
@@ -79,8 +79,8 @@
                 android:textColor="@color/main_orange"
                 android:textSize="12sp"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/et_promocode"
-                app:layout_constraintTop_toBottomOf="@+id/et_promocode" />
+                app:layout_constraintStart_toStartOf="@+id/et_bonuses"
+                app:layout_constraintTop_toBottomOf="@+id/et_bonuses" />
 
             <TextView
                 android:id="@+id/error_msg2"
@@ -90,10 +90,10 @@
                 android:text="Количество бонусов превышает стоимость заказа"
                 android:textColor="@color/main_orange"
                 android:textSize="12sp"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="@+id/et_promocode"
-                app:layout_constraintStart_toStartOf="@+id/et_promocode"
-                app:layout_constraintTop_toBottomOf="@+id/et_promocode" />
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/et_bonuses"
+                app:layout_constraintStart_toStartOf="@+id/et_bonuses"
+                app:layout_constraintTop_toBottomOf="@+id/et_bonuses" />
 
             <TextView
                 android:id="@+id/bonuses_amount_text"
@@ -101,8 +101,8 @@
                 android:layout_height="wrap_content"
                 android:text="Имеется"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/et_promocode"
-                app:layout_constraintTop_toBottomOf="@+id/et_promocode" />
+                app:layout_constraintStart_toStartOf="@+id/et_bonuses"
+                app:layout_constraintTop_toBottomOf="@+id/et_bonuses" />
 
             <TextView
                 android:id="@+id/bonuses_amount"

@@ -72,7 +72,7 @@ class ListBranchPageFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putString(ARG_BRANCH_ADDRESS, branch.address)
                 }
-                findNavController().navigate(R.id.orderPaymentFragment, bundle)
+                findNavController().navigate(R.id.orderPaymentBranchFragment, bundle)
             }
         })
     }

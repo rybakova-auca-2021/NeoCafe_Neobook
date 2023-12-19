@@ -218,5 +218,28 @@
         <action
             android:id="@+id/action_checkoutFragment_to_detailProductFragment"
             app:destination="@id/detailProductFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_basketFragment2"
+            app:destination="@id/basketFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/basketFragment2"
+        android:name="com.example.neocafe.view.basket.OrderBranches.BasketFragment"
+        android:label="fragment_basket2"
+        tools:layout="@layout/fragment_basket2" >
+        <action
+            android:id="@+id/action_basketFragment2_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+        <action
+            android:id="@+id/action_basketFragment2_to_orderPaymentBranchFragment"
+            app:destination="@id/orderPaymentBranchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderPaymentBranchFragment"
+        android:name="com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPaymentBranchFragment"
+        android:label="OrderPaymentBranchFragment" >
+        <action
+            android:id="@+id/action_orderPaymentBranchFragment_to_basketFragment2"
+            app:destination="@id/basketFragment2" />
     </fragment>
 </navigation>

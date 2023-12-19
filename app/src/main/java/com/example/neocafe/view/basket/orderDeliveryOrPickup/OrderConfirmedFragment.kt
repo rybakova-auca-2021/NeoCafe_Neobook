@@ -8,10 +8,20 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.neocafe.R
 import com.example.neocafe.databinding.FragmentOrderConfirmedBinding
+import com.example.neocafe.room.MyApplication
+import com.example.neocafe.room.ProductDao
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class OrderConfirmedFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentOrderConfirmedBinding
+    private val productDao: ProductDao by lazy {
+        (requireActivity().application as MyApplication).database.productDao()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +47,18 @@ class OrderConfirmedFragment : BottomSheetDialogFragment() {
     private fun setupNavigation() {
         binding.btnConfirm.setOnClickListener {
             dismiss()
-            findNavController().navigate(R.id.myOrdersFragment)
+            findNavController().navigate(R.id.basketFragment)
+            clearBasket()
+        }
+    }
+
+    private fun clearBasket() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val orders = productDao.getAllCartItems()
+
+            if (orders.isNotEmpty()) {
+                productDao.deleteProducts(orders)
+            }
         }
     }
 }

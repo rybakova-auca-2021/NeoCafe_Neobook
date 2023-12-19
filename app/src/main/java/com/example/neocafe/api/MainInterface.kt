@@ -66,11 +66,11 @@ interface MainInterface {
     ): Call<OrderConfirm>
 
     @GET("my-orders/")
-    fun getOrders(): Call<List<GetOrder>>
+    fun getOrders(@Header("Authorization") token: String): Call<List<GetOrder>>
 
     @GET("orders/{order_number}/")
     fun getOrderById(
-        @Path("id") id: Int
+        @Path("order_number") id: Int
     ): Call<DetailOrder>
 
     @GET("question-list/")

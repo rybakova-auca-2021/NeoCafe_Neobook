@@ -24,7 +24,7 @@ data class GetOrder(
     val total_amount: String,
     val created_date: String,
     val user: Int,
-    val status: String,
+    var status: String,
     val order_item: List<OrderItem>
 )
 

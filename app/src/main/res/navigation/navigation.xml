@@ -192,4 +192,14 @@
         android:name="com.example.neocafe.view.basket.MyOrdersFragment"
         android:label="fragment_my_orders"
         tools:layout="@layout/fragment_my_orders" />
+    <fragment
+        android:id="@+id/detailOrderFragment"
+        android:name="com.example.neocafe.view.basket.DetailOrderFragment"
+        android:label="fragment_detail_order"
+        tools:layout="@layout/fragment_detail_order" />
+    <fragment
+        android:id="@+id/detailOrderDeliveredFragment"
+        android:name="com.example.neocafe.view.basket.DetailOrderDeliveredFragment"
+        android:label="fragment_detail_order_delivered"
+        tools:layout="@layout/fragment_detail_order_delivered" />
 </navigation>

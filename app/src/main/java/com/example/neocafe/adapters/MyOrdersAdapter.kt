@@ -65,6 +65,7 @@ class MyOrdersAdapter(private var orders: List<GetOrder>) :
             binding.orderNumber.text = "Заказ №${order.order_number}"
             binding.orderDate.text = order.created_date
             binding.orderTotalPrice.text = "${order.total_amount} c"
+            binding.textView4.text = order.status
         }
     }
 

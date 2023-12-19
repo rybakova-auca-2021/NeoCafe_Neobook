@@ -51,6 +51,7 @@ class AllPromotionsFragment : Fragment() {
             override fun onItemClick(promotion: Promotion) {
                 val bundle = Bundle()
                 bundle.putInt("id", promotion.id)
+                bundle.putString("sourceFragment", "mainPageFragment")
                 findNavController().navigate(R.id.detailPromotionFragment, bundle)
             }
         })

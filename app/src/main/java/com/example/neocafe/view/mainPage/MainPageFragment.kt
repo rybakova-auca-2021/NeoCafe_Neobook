@@ -19,6 +19,7 @@ import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentMainPageBinding
 import com.example.neocafe.model.Branch
 import com.example.neocafe.model.Product
+import com.example.neocafe.model.Promotion
 import com.example.neocafe.room.MyApplication
 import com.example.neocafe.room.ProductDao
 import com.example.neocafe.view.basket.OrderBranches.DialogBranchFragment
@@ -140,6 +141,15 @@ class MainPageFragment : Fragment() {
                 bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
             }
         })
+        promotionAdapter.setOnItemClickListener(object : PromotionsMainAdapter.OnItemClickListener {
+            override fun onItemClick(promotion: Promotion) {
+                val bundle = Bundle()
+                bundle.putInt("id", promotion.id)
+                bundle.putString("sourceFragment", "mainPageFragment")
+                findNavController().navigate(R.id.detailPromotionFragment, bundle)
+            }
+        })
+
     }
 
     private fun getProducts() {

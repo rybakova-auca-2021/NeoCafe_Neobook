@@ -38,7 +38,11 @@ class DetailPromotionFragment : Fragment() {
 
     private fun setupNavigation() {
         binding.btnBack.setOnClickListener{
-            findNavController().navigate(R.id.action_detailPromotionFragment_to_allPromotionsFragment)
+            when (arguments?.getString("sourceFragment") ?: "") {
+                "orderPaymentBranchFragment" -> findNavController().navigate(R.id.orderPaymentBranchFragment,)
+                "orderPaymentFragment" -> findNavController().navigate(R.id.orderPaymentFragment)
+                else -> findNavController().popBackStack()
+            }
         }
     }
 

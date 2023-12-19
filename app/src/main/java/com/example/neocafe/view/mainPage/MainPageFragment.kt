@@ -17,9 +17,11 @@ import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.adapters.PromotionsMainAdapter
 import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentMainPageBinding
+import com.example.neocafe.model.Branch
 import com.example.neocafe.model.Product
 import com.example.neocafe.room.MyApplication
 import com.example.neocafe.room.ProductDao
+import com.example.neocafe.view.basket.OrderBranches.DialogBranchFragment
 import com.example.neocafe.view.registration.RegisterFragment
 import com.example.neocafe.viewModel.BonusesViewModel
 import com.example.neocafe.viewModel.GetBranchesViewModel
@@ -89,6 +91,9 @@ class MainPageFragment : Fragment() {
         binding.btnAllPopular.setOnClickListener {
             findNavController().navigate(R.id.action_mainPageFragment_to_popularPageFragment)
         }
+        binding.btnNotifications.setOnClickListener {
+            findNavController().navigate(R.id.notificationsFragment)
+        }
     }
 
     private fun setupAdapters() {
@@ -128,7 +133,15 @@ class MainPageFragment : Fragment() {
                 }
             }
         })
+
+        branchAdapter.setOnItemClickListener(object : BranchesMainAdapter.OnItemClickListener {
+            override fun onItemClick(branch: Branch) {
+                val bottomSheetFragment = DialogBranchFragment.newInstance(branch.title)
+                bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+            }
+        })
     }
+
     private fun getProducts() {
         viewModel.getAllProducts() {
                 product ->

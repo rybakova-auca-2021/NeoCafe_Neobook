@@ -18,6 +18,7 @@ import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.databinding.FragmentListBranchPageBinding
 import com.example.neocafe.model.Branch
 import com.example.neocafe.model.Promotion
+import com.example.neocafe.view.basket.OrderBranches.DialogBranchFragment
 import com.example.neocafe.viewModel.GetBranchesViewModel
 
 class ListBranchPageFragment : Fragment() {
@@ -63,7 +64,8 @@ class ListBranchPageFragment : Fragment() {
     private fun setupClicks() {
         adapter.setOnItemClickListener(object : BranchListAdapter.OnItemClickListener {
             override fun onItemClick(branch: Branch) {
-                TODO("Not yet implemented")
+                val bottomSheetFragment = DialogBranchFragment.newInstance(branch.title)
+                bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
             }
 
             override fun onCheckClick(branch: Branch) {

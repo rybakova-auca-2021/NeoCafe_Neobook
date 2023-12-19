@@ -91,6 +91,8 @@ class SendCodeFragment : BottomSheetDialogFragment() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val pin = binding.pinview.text.toString()
                     binding.btnSendCode.isEnabled = pin.isNotEmpty()
+                    val whiteColor = resources.getColor(com.example.neocafe.R.color.white)
+                    binding.btnSendCode.setTextColor(whiteColor)
                 }
 
                 override fun afterTextChanged(s: Editable?) {

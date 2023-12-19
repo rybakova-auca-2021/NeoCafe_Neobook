@@ -70,6 +70,7 @@ class PopularMainAdapter(private var popularItems: List<Product>) :
                     val clickedItem = popularItems[position]
                     (clickedItem as? Product)?.let { itemClickListener?.onAddClick(it) }
                 }
+                binding.btnAdd.text = "Добавлено"
             }
         }
 

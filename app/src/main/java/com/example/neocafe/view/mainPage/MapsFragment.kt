@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.neocafe.R
+import com.example.neocafe.model.Branch
+import com.example.neocafe.viewModel.GetBranchesViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -25,8 +28,12 @@ class MapsFragment : Fragment() {
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var lastKnownLocation: LatLng? = null
+    private var googleMap: GoogleMap? = null
+    private val viewModel: GetBranchesViewModel by viewModels()
 
     private val callback = OnMapReadyCallback { googleMap ->
+        this.googleMap = googleMap
+
         googleMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
 
         // Check for location permission
@@ -47,17 +54,19 @@ class MapsFragment : Fragment() {
             } catch (securityException: SecurityException) {
             }
         } else {
-            // Request location permission
             requestLocationPermission()
         }
 
         val bishkek = LatLng(42.811147, 74.627617)
         val cameraPosition = CameraPosition.Builder()
             .target(bishkek)
-            .zoom(15.0f)
+            .zoom(13.0f)
             .build()
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         googleMap.addMarker(MarkerOptions().position(bishkek).title("Marker in Bishkek"))
+
+        // Call getBranches to add markers for branches
+        getBranches()
     }
 
     override fun onCreateView(
@@ -108,4 +117,23 @@ class MapsFragment : Fragment() {
             }
         }
     }
+
+    private fun getBranches() {
+        viewModel.getAllBranches { branches ->
+            branches.forEach { branch ->
+                val branchLocation = LatLng(branch.latitude.toDouble(), branch.longitude.toDouble())
+                val marker = googleMap?.addMarker(MarkerOptions().position(branchLocation).title(branch.address))
+
+                marker?.tag = branch
+
+                googleMap?.setOnMarkerClickListener { clickedMarker ->
+                    val clickedBranch = clickedMarker.tag as Branch
+                    val bottomSheetFragment = BranchInfoBottomFragment.newInstance(clickedBranch.title)
+                    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+                    true
+                }
+            }
+        }
+    }
+
 }

@@ -4,19 +4,19 @@ data class Order(
     val products: List<OrderItem>,
     val user: Int,
     val delivery_type: String,
-    val address: String,
-    val apartment: String,
-    val intercom_code: String,
-    val entrance: String,
-    val floor: String,
+    val address: String?,
+    val apartment: String?,
+    val intercom_code: String?,
+    val entrance: String?,
+    val floor: String?,
     val phone: String,
     val change_from: Int,
-    val comment: String,
-    val pickup_branch: Int,
+    val comment: String?,
+    val pickup_branch: Int?,
     val cutlery: Int,
     val qr_code: String,
-    val use_bonus: String,
-    val coupon_code: String
+    val use_bonus: String?,
+    val coupon_code: String?
 )
 
 data class GetOrder(

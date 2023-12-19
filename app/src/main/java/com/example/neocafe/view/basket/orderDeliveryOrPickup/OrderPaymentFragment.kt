@@ -1,5 +1,6 @@
 package com.example.neocafe.view.basket.orderDeliveryOrPickup
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.neocafe.MainActivity
@@ -28,6 +33,7 @@ import kotlinx.coroutines.withContext
 class OrderPaymentFragment : Fragment() {
     private lateinit var binding: FragmentOrderPaymentBinding
     private val viewModel: PostOrderViewModel by viewModels()
+    private val ARG_BRANCH_ADDRESS = "branchAddress"
     private val productDao: ProductDao by lazy {
         (requireActivity().application as MyApplication).database.productDao()
     }
@@ -44,9 +50,16 @@ class OrderPaymentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getOrders()
+        if (arguments != null && arguments?.containsKey(ARG_BRANCH_ADDRESS) == true) {
+            val address = arguments?.getString(ARG_BRANCH_ADDRESS)
+            binding.etBranch.setText(address)
+        }
+
         binding.button.setOnClickListener {
             postOrders()
         }
+        setupCards()
+        setupBranchPage()
         setupPromocodeDialog()
         setupBonusesDialog()
         setupCommentDialog()
@@ -59,6 +72,32 @@ class OrderPaymentFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
+    private fun setupCards() {
+        binding.cardDelivery.setOnClickListener {
+            binding.cardDelivery.setCardBackgroundColor(R.color.light_grey)
+            binding.deliveryIcon.setImageResource(R.drawable.delivery_icon_orange)
+            binding.deliveryPrice.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_orange))
+            binding.constraintDelivery.visibility = View.VISIBLE
+            binding.constraintPickup.visibility = View.GONE
+            binding.cardSelfPickup.setCardBackgroundColor(R.color.white)
+            binding.pickupIcon.setImageResource(R.drawable.branch_icon)
+            binding.pickupPrice.setTextColor(R.color.grey)
+        }
+
+        binding.cardSelfPickup.setOnClickListener {
+            binding.cardSelfPickup.setCardBackgroundColor(R.color.light_grey)
+            binding.pickupIcon.setImageResource(R.drawable.branch_icon_orange)
+            binding.pickupPrice.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_orange))
+            binding.constraintPickup.visibility = View.VISIBLE
+            binding.constraintDelivery.visibility = View.GONE
+            binding.cardDelivery.setCardBackgroundColor(R.color.white)
+            binding.deliveryIcon.setImageResource(R.drawable.delivery_icon)
+            binding.deliveryPrice.setTextColor(R.color.grey)
+        }
+    }
+
+
     private fun postOrders() {
         CoroutineScope(Dispatchers.IO).launch {
             val orders = productDao.getAllCartItems()
@@ -69,21 +108,21 @@ class OrderPaymentFragment : Fragment() {
                         Order(
                             products = orderItems,
                             user = it,
-                            delivery_type = "delivery",
-                            address = binding.etAddress.text.toString(),
-                            apartment = binding.etApartment.text.toString(),
-                            intercom_code = binding.etCode.text.toString(),
-                            entrance = binding.etEntrance.text.toString(),
-                            floor = binding.etFloor.text.toString(),
-                            phone = binding.etPhone.text.toString(),
+                            delivery_type = if (binding.constraintDelivery.visibility == View.VISIBLE) "delivery" else "pickup",
+                            address = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etAddress.text.toString() else "",
+                            apartment = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etApartment.text.toString() else "",
+                            intercom_code = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etCode.text.toString() else "",
+                            entrance = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etEntrance.text.toString() else "",
+                            floor = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etFloor.text.toString() else "",
+                            phone = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etPhone.text.toString() else "",
                             change_from = try {
                                 binding.etChange.text.toString().toInt()
                             } catch (e: NumberFormatException) {
                                 0
                             },
                             comment = binding.etComment.text.toString(),
-                            pickup_branch = 1,
-                            cutlery = 1,
+                            pickup_branch = if (binding.constraintDelivery.visibility != View.VISIBLE) 1 else 0,
+                            cutlery = if (binding.constraintDelivery.visibility == View.VISIBLE) 1 else 0,
                             qr_code =  "",
                             use_bonus = binding.etBonuses.text.toString(),
                             coupon_code = binding.etPromocode.text.toString()
@@ -96,6 +135,7 @@ class OrderPaymentFragment : Fragment() {
             }
         }
     }
+
 
     private fun getOrders() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -154,6 +194,14 @@ class OrderPaymentFragment : Fragment() {
         }
     }
 
+    private fun setupBranchPage() {
+        binding.etBranch.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("requestCode", ADDRESS_REQUEST_CODE)
+            findNavController().navigate(R.id.allBranchesFragment, bundle)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -175,6 +223,13 @@ class OrderPaymentFragment : Fragment() {
                     binding.etComment.setText(comments)
                 }
             }
+            ADDRESS_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val address = data?.getStringExtra("address")
+                    println("Address is: $address")
+                    binding.etBranch.setText(address)
+                }
+            }
         }
     }
 
@@ -182,6 +237,7 @@ class OrderPaymentFragment : Fragment() {
         const val PROMOCODE_REQUEST_CODE = 1
         const val BONUSES_REQUEST_CODE = 2
         const val COMMENTS_REQUEST_CODE = 3
+        const val ADDRESS_REQUEST_CODE = 4
     }
 
 

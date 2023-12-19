@@ -2,6 +2,7 @@ package com.example.neocafe.adapters
 
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ class BranchListAdapter(private var branches: List<Branch>) :
 
     interface OnItemClickListener {
         fun onItemClick(branch: Branch)
+        fun onCheckClick(branch: Branch)
     }
 
 
@@ -57,6 +59,14 @@ class BranchListAdapter(private var branches: List<Branch>) :
                 if (position != RecyclerView.NO_POSITION) {
                     val clickedItem = branches[position]
                     itemClickListener?.onItemClick(clickedItem)
+                }
+            }
+            binding.cardCheck.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val clickedItem = branches[position]
+                    binding.checkImg.visibility = View.VISIBLE
+                    itemClickListener?.onCheckClick(clickedItem)
                 }
             }
         }

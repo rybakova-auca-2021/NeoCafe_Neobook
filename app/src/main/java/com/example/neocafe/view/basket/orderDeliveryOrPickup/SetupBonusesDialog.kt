@@ -9,52 +9,85 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import com.example.neocafe.R
+import com.example.neocafe.databinding.DialogBonusesBinding
+import com.example.neocafe.viewModel.BonusesViewModel
 
 class SetupBonusesDialog : DialogFragment() {
+    private val bonusesViewModel: BonusesViewModel by viewModels()
+    private lateinit var binding: DialogBonusesBinding
+
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.dialog_bonuses, container, false)
+        binding = DialogBonusesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val etBonusCode = view.findViewById<EditText>(R.id.et_bonuses)
-        val btnConfirm = view.findViewById<Button>(R.id.btn_confirm_bonus)
-        val btnCancel = view.findViewById<TextView>(R.id.btn_cancel_bonus)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupViews()
+        getBonuses()
+    }
 
-        btnConfirm.isEnabled = etBonusCode.text.isNotEmpty()
+    private fun setupViews() {
+        binding.apply {
+            val etBonusCode = etBonuses
+            val btnConfirm = btnConfirmBonus
+            val btnCancel = btnCancelBonus
 
-        etBonusCode.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            btnConfirm.isEnabled = etBonusCode.text.isNotEmpty()
 
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+            etBonusCode.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+                }
 
-            override fun afterTextChanged(editable: Editable?) {
-                btnConfirm.isEnabled = !editable.isNullOrEmpty()
-                val whiteColor = resources.getColor(com.example.neocafe.R.color.white)
-                btnConfirm.setTextColor(whiteColor)
-            }
-        })
+                override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+                }
 
-        btnConfirm.setOnClickListener {
-            val bonusCode = etBonusCode.text.toString()
-            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, Intent().apply {
-                putExtra("bonuses", bonusCode)
+                override fun afterTextChanged(editable: Editable?) {
+                    btnConfirm.isEnabled = !editable.isNullOrEmpty()
+                    val whiteColor = resources.getColor(R.color.white)
+                    btnConfirm.setTextColor(whiteColor)
+                }
             })
-            dismiss()
-        }
 
-        btnCancel.setOnClickListener {
-            dismiss()
+            btnCancel.setOnClickListener {
+                dismiss()
+            }
         }
+    }
 
-        return view
+    private fun getBonuses() {
+        bonusesViewModel.getBonusesAmount(
+            onSuccess = { bonus ->
+                binding.bonusesAmount.visibility = View.VISIBLE
+                binding.bonusImg.visibility = View.VISIBLE
+                binding.bonusesAmount.text = bonus.amount
+                binding.btnConfirmBonus.setOnClickListener {
+                    val bonusCode = binding.etBonuses.text.toString()
+                    if (bonusCode > bonus.amount) {
+                        binding.errorMsg.visibility = View.VISIBLE
+                        binding.bonusesAmount.visibility = View.GONE
+                        binding.bonusImg.visibility = View.GONE
+                        binding.bonusesAmountText.visibility = View.GONE
+                        val orange = resources.getColor(R.color.main_orange)
+                        binding.etBonuses.setTextColor(orange)
+                    } else {
+                        targetFragment?.onActivityResult(
+                            targetRequestCode,
+                            Activity.RESULT_OK,
+                            Intent().apply {
+                                putExtra("bonuses", bonusCode)
+                            })
+                        dismiss()
+                    }
+                }
+            }
+        )
     }
 }

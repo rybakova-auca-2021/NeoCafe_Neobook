@@ -36,9 +36,10 @@ class SendCodeFragment : BottomSheetDialogFragment() {
         val phone = Utils.phone
 
         binding.codeText.text = "Код был отправлен на номер  $phone"
-        setupValidation()
+        setupValidation(userId)
         setupNavigation(userId)
         startCountdownTimer()
+
     }
 
     private fun setupNavigation(userId: String) {
@@ -46,7 +47,7 @@ class SendCodeFragment : BottomSheetDialogFragment() {
             navigateToProfileFragment()
         }
         binding.btnSendCode.setOnClickListener {
-            checkCode(userId)
+
         }
     }
 
@@ -55,8 +56,7 @@ class SendCodeFragment : BottomSheetDialogFragment() {
         dismiss() // Dismiss the fragment after navigating
     }
 
-    private fun checkCode(userId: String) {
-        val code = binding.pinview.text.toString()
+    private fun checkCode(userId: String, code: String) {
         viewModel.checkCode(code, userId,
             onSuccess = {
                 navigateToProfileInfoFragment()
@@ -69,16 +69,15 @@ class SendCodeFragment : BottomSheetDialogFragment() {
 
     private fun navigateToProfileInfoFragment() {
         findNavController().navigate(R.id.profileInfoFragment)
-        dismiss() // Dismiss the fragment after navigating
+        dismiss()
     }
 
     private fun handleCheckCodeError() {
         binding.pinview.setTextColor(resources.getColor(R.color.main_orange))
         binding.wrongCodeMsg.visibility = View.VISIBLE
-        dismiss() // Dismiss the fragment after handling the error
     }
 
-    private fun setupValidation() {
+    private fun setupValidation(userId: String) {
         val textWatchers = arrayOf(
             binding.pinview
         )
@@ -89,13 +88,13 @@ class SendCodeFragment : BottomSheetDialogFragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val pin = binding.pinview.text.toString()
-                    binding.btnSendCode.isEnabled = pin.isNotEmpty()
-                    val whiteColor = resources.getColor(com.example.neocafe.R.color.white)
-                    binding.btnSendCode.setTextColor(whiteColor)
                 }
 
                 override fun afterTextChanged(s: Editable?) {
+                    val pin = binding.pinview.text.toString()
+                    if (pin.length == 4) {
+                        checkCode(userId, pin)
+                    }
                 }
             })
         }
@@ -116,7 +115,8 @@ class SendCodeFragment : BottomSheetDialogFragment() {
                 timeRemaining = 0
                 if (isAdded) {
                     binding.btnSendCode.isEnabled = true
-                    binding.btnSendCode.setTextColor(requireContext().resources.getColor(R.color.white))
+                    val whiteColor = resources.getColor(com.example.neocafe.R.color.white)
+                    binding.btnSendCode.setTextColor(whiteColor)
                 }
             }
         }

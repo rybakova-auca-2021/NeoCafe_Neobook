@@ -56,7 +56,7 @@ interface MainInterface {
 
     @POST("send-notification/")
     fun sendNotification(
-        @Body request: NotificationRequest
+        @Body request: Map<String, Any>
     ): Call<NotificationRequest>
 
     @POST("orders/")
@@ -70,6 +70,7 @@ interface MainInterface {
 
     @GET("orders/{order_number}/")
     fun getOrderById(
+        @Header("Authorization") token: String,
         @Path("order_number") id: Int
     ): Call<DetailOrder>
 

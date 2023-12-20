@@ -3,6 +3,7 @@ package com.example.neocafe.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.databinding.CardMyOrdersBinding
 import com.example.neocafe.model.GetOrder
@@ -66,6 +67,10 @@ class MyOrdersAdapter(private var orders: List<GetOrder>) :
             binding.orderDate.text = order.created_date
             binding.orderTotalPrice.text = "${order.total_amount} c"
             binding.textView4.text = order.status
+            val productImagesAdapter = ProductImagesAdapter(order.order_item.map { it.product.image })
+            binding.rvProductImages.layoutManager =
+                LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
+            binding.rvProductImages.adapter = productImagesAdapter
         }
     }
 

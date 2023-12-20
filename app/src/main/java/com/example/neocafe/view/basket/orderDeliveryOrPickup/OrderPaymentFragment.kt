@@ -20,6 +20,7 @@ import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentOrderPaymentBinding
 import com.example.neocafe.model.Order
 import com.example.neocafe.model.OrderItem
+import com.example.neocafe.model.ProductItem
 import com.example.neocafe.room.MyApplication
 import com.example.neocafe.room.Product
 import com.example.neocafe.room.ProductDao

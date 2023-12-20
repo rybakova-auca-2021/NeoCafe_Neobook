@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.neocafe.MainActivity
 import com.example.neocafe.R
+import com.example.neocafe.adapters.OrderItemAdapter
 import com.example.neocafe.adapters.OrdersAdapter2
 import com.example.neocafe.databinding.FragmentDetailOrderBinding
 import com.example.neocafe.databinding.FragmentDetailOrderDeliveredBinding
@@ -20,7 +23,7 @@ class DetailOrderDeliveredFragment : Fragment() {
     private lateinit var binding: FragmentDetailOrderDeliveredBinding
     private val viewModel: GetOrderByIdViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: OrdersAdapter2
+    private lateinit var adapter: OrderItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +31,7 @@ class DetailOrderDeliveredFragment : Fragment() {
     ): View? {
         binding = FragmentDetailOrderDeliveredBinding.inflate(inflater, container, false)
         recyclerView = binding.rvOrders
+        (requireActivity() as MainActivity).hideBtmNav()
         return binding.root
     }
 
@@ -38,6 +42,13 @@ class DetailOrderDeliveredFragment : Fragment() {
             getOrder(id)
         }
         setupRecyclerView()
+        setupNavigation()
+    }
+
+    private fun setupNavigation() {
+        binding.imageView8.setOnClickListener {
+            findNavController().navigate(R.id.basketFragment)
+        }
     }
 
     private fun getOrder(id: Int) {
@@ -49,11 +60,12 @@ class DetailOrderDeliveredFragment : Fragment() {
                 binding.orderPriceRes.text = "${orderDetail.total_amount} c"
                 binding.orderAddress.text = "${orderDetail.address}"
                 binding.orderTotal.text = orderDetail.total_amount
+                adapter.updateData(orderDetail.order_item)
             })
     }
 
     private fun setupRecyclerView() {
-        adapter = OrdersAdapter2()
+        adapter = OrderItemAdapter()
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }

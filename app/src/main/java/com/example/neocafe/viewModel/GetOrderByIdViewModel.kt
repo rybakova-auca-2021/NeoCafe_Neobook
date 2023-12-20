@@ -2,6 +2,7 @@ package com.example.neocafe.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.example.neocafe.api.RetrofitInstance
+import com.example.neocafe.constants.Utils
 import com.example.neocafe.model.DetailOrder
 import retrofit2.Call
 import retrofit2.Callback
@@ -13,7 +14,9 @@ class GetOrderByIdViewModel : ViewModel() {
         id: Int,
         onSuccess: (DetailOrder) -> Unit
     ) {
-        apiInterface.getOrderById(id)
+        val token = Utils.access
+        val authHeader = "Bearer $token"
+        apiInterface.getOrderById(authHeader, id)
             .enqueue(getCallback(onSuccess))
     }
 

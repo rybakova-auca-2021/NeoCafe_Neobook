@@ -25,12 +25,12 @@ data class GetOrder(
     val created_date: String,
     val user: Int,
     var status: String,
-    val order_item: List<OrderItem>
+    val order_item: List<OrderItem2>
 )
 
 data class DetailOrder(
     val order_number: Int,
-    val order_item: List<OrderItem>,
+    val order_item: List<OrderItem2>,
     val status: String,
     val created_date: String,
     val products_amount: String,
@@ -67,4 +67,15 @@ data class OrderConfirm(
 data class OrderItem(
     val product: Int,
     val quantity: Int
+)
+
+data class OrderItem2(
+    val product: ProductItem,
+    val quantity: Int
+)
+
+data class ProductItem(
+    val title: String,
+    val price: String?,
+    val image: String?
 )

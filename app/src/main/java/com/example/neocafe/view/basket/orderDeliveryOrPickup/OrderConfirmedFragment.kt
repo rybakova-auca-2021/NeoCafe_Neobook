@@ -48,17 +48,6 @@ class OrderConfirmedFragment : BottomSheetDialogFragment() {
         binding.btnConfirm.setOnClickListener {
             dismiss()
             findNavController().navigate(R.id.basketFragment)
-            clearBasket()
-        }
-    }
-
-    private fun clearBasket() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val orders = productDao.getAllCartItems()
-
-            if (orders.isNotEmpty()) {
-                productDao.deleteProducts(orders)
-            }
         }
     }
 }

@@ -33,7 +33,7 @@ class DetailOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val id = arguments?.getInt("id")
+        val id = arguments?.getInt("order_number")
         if (id != null) {
             getOrder(id)
         }
@@ -52,12 +52,13 @@ class DetailOrderFragment : Fragment() {
                     orderDetail ->
                 binding.orderNumber.text = "Заказ №${orderDetail.order_number}"
                 binding.orderStatus.text = orderDetail.status
-                binding.orderPriceRes.text = "${orderDetail.total_amount} c"
+                binding.orderPriceRes.text = "${orderDetail.products_amount} c"
                 binding.orderBonusesRes.text = "${orderDetail.spent_bonus}"
                 binding.orderPromocodeRes.text = "${orderDetail.promo_code}"
                 binding.orderClutteryRes.text = "${orderDetail.cutlery} шт"
                 binding.orderAddress.text = "${orderDetail.address}"
                 binding.orderTotal.text = orderDetail.total_amount
+                binding.orderDate.text = orderDetail.created_date
                 adapter.updateData(orderDetail.order_item)
             })
     }

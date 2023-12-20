@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.adapters.OrdersAdapter
+import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentNewOrderBinding
 import com.example.neocafe.room.MyApplication
 import com.example.neocafe.room.Product
 import com.example.neocafe.room.ProductDao
 import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPhoneFragment
-import com.example.neocafe.constants.Utils
-import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPaymentFragment
 import com.example.neocafe.view.basket.orderDeliveryOrPickup.SetupCommentDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

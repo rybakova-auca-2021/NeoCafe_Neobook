@@ -200,7 +200,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraint_delivery"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="24dp">
@@ -314,7 +314,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraint_pickup"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="24dp">

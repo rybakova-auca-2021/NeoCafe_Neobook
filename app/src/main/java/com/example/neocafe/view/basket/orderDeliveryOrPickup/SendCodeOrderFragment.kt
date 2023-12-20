@@ -39,7 +39,7 @@ class SendCodeOrderFragment : BottomSheetDialogFragment() {
         val phone = Utils.phone
 
         binding.codeText.text = "Код был отправлен на номер  $phone"
-        setupValidation()
+        setupValidation(userId)
         setupNavigation(userId)
         startCountdownTimer()
     }
@@ -49,7 +49,7 @@ class SendCodeOrderFragment : BottomSheetDialogFragment() {
             navigateToBasketFragment()
         }
         binding.btnSendCode.setOnClickListener {
-            checkCode(userId)
+            startCountdownTimer()
         }
     }
 
@@ -78,10 +78,9 @@ class SendCodeOrderFragment : BottomSheetDialogFragment() {
     private fun handleCheckCodeError() {
         binding.pinview.setTextColor(resources.getColor(R.color.main_orange))
         binding.wrongCodeMsg.visibility = View.VISIBLE
-        dismiss() // Dismiss the fragment after handling the error
     }
 
-    private fun setupValidation() {
+    private fun setupValidation(userId: String) {
         val textWatchers = arrayOf(
             binding.pinview
         )
@@ -92,11 +91,13 @@ class SendCodeOrderFragment : BottomSheetDialogFragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val pin = binding.pinview.text.toString()
-                    binding.btnSendCode.isEnabled = pin.isNotEmpty()
                 }
 
                 override fun afterTextChanged(s: Editable?) {
+                    val pin = binding.pinview.text.toString()
+                    if (pin.length == 4) {
+                        checkCode(userId)
+                    }
                 }
             })
         }

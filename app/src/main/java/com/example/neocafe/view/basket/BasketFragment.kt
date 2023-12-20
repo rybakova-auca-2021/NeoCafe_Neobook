@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.adapters.ViewPagerAdapter
 import com.example.neocafe.adapters.ViewPagerAdapterBasket
@@ -35,6 +36,7 @@ class BasketFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBasketBinding.inflate(inflater, container, false)
+        (requireActivity() as MainActivity).showBtmNav()
         val tabLayout = binding.tabLayout
         val viewPager2 = binding.fragmentHolder
 

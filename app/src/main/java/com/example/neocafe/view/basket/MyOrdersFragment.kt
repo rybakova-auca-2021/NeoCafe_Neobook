@@ -30,7 +30,7 @@ class MyOrdersFragment : Fragment() {
     ): View? {
         binding = FragmentMyOrdersBinding.inflate(inflater, container, false)
         recyclerView = binding.rvMyOrders
-        (requireActivity() as MainActivity).hideBtmNav()
+        (requireActivity() as MainActivity).showBtmNav()
         return binding.root
     }
 

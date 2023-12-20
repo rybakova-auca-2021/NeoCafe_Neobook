@@ -48,11 +48,12 @@
                 android:layout_height="35dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/rounded_btn"
                 android:text="Добавить"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -62,12 +63,60 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/montserrat_medium"
-                tools:text="350c"
                 android:textColor="@color/main_orange"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_add"
-                app:layout_constraintStart_toStartOf="@+id/popular_card_title" />
+                app:layout_constraintStart_toStartOf="@+id/popular_card_title"
+                app:layout_constraintTop_toBottomOf="@+id/popular_card_title"
+                tools:text="350c" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_added"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/popular_item_price" >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/btn_plus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/plus_btn" />
+
+                    <ImageView
+                        android:id="@+id/btn_minus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/minus_btn" />
+
+                    <TextView
+                        android:id="@+id/quantity_text"
+                        style="@style/TextStyle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_plus"
+                        app:layout_constraintStart_toEndOf="@+id/btn_minus"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

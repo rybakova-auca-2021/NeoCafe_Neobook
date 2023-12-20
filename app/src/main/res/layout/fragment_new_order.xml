@@ -100,10 +100,60 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:text="Приборы"
+                        android:visibility="visible"
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView10"
                         app:layout_constraintStart_toEndOf="@+id/imageView10"
                         app:layout_constraintTop_toTopOf="@+id/imageView10" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_clutery"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="16dp"
+                        android:backgroundTint="@color/light_grey"
+                        app:cardCornerRadius="10dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView10"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/order_quantity"
+                                android:layout_width="7dp"
+                                android:layout_height="21dp"
+                                android:fontFamily="@font/montserrat_bold"
+                                android:textColor="@color/black"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/btn_plus"
+                                app:layout_constraintStart_toEndOf="@+id/btn_minus"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="1" />
+
+                            <ImageView
+                                android:id="@+id/btn_plus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/plus_03" />
+
+                            <ImageView
+                                android:id="@+id/btn_minus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/minus" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
 
                     <ImageView
                         android:id="@+id/imageView10"
@@ -122,7 +172,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_comment"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -164,6 +214,15 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/comment_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        tools:text="Постарайтесь не переборщить солью так как я очень чувствителен ко вкусам"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView12"
+                        app:layout_constraintStart_toStartOf="@+id/comment"
+                        app:layout_constraintTop_toBottomOf="@+id/comment" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>

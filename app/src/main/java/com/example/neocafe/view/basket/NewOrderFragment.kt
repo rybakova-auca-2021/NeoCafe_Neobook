@@ -1,5 +1,7 @@
 package com.example.neocafe.view.basket
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.adapters.OrdersAdapter
 import com.example.neocafe.databinding.FragmentNewOrderBinding
@@ -17,6 +20,7 @@ import com.example.neocafe.room.ProductDao
 import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPhoneFragment
 import com.example.neocafe.constants.Utils
 import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPaymentFragment
+import com.example.neocafe.view.basket.orderDeliveryOrPickup.SetupCommentDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +30,7 @@ class NewOrderFragment : Fragment() {
     private lateinit var binding: FragmentNewOrderBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: OrdersAdapter
+    private var orderQuantity = 0
     private val productDao: ProductDao by lazy {
         (requireActivity().application as MyApplication).database.productDao()
     }
@@ -37,6 +42,7 @@ class NewOrderFragment : Fragment() {
     ): View? {
         binding = FragmentNewOrderBinding.inflate(inflater, container, false)
         recyclerView = binding.recyclerView
+        (requireActivity() as MainActivity).showBtmNav()
         return binding.root
     }
 
@@ -46,6 +52,28 @@ class NewOrderFragment : Fragment() {
         setupRecyclerView()
         getOrders()
         setupNavigation()
+        setupCommentDialog()
+        binding.switch1.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.cardClutery.visibility = View.VISIBLE
+                binding.appliences.visibility = View.GONE
+            } else {
+                binding.cardClutery.visibility = View.GONE
+                binding.appliences.visibility = View.VISIBLE
+            }
+        }
+
+        binding.btnPlus.setOnClickListener {
+            orderQuantity++
+            binding.orderQuantity.text = orderQuantity.toString()
+        }
+
+        binding.btnMinus.setOnClickListener {
+            if (orderQuantity > 0) {
+                orderQuantity--
+                binding.orderQuantity.text = orderQuantity.toString()
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -60,7 +88,10 @@ class NewOrderFragment : Fragment() {
         }
         binding.btnNext.setOnClickListener {
             if (Utils.access != null) {
-                findNavController().navigate(R.id.orderPaymentFragment)
+                val bundle = Bundle().apply {
+                    putInt("orderQuantity", orderQuantity)
+                }
+                findNavController().navigate(R.id.orderPaymentFragment, bundle)
             } else {
                 val bottomSheetFragment = OrderPhoneFragment()
                 bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
@@ -97,8 +128,33 @@ class NewOrderFragment : Fragment() {
         recyclerView.visibility = View.GONE
     }
 
+    private fun setupCommentDialog() {
+        binding.cardComment.setOnClickListener {
+            val dialog = SetupCommentDialog()
+            dialog.setTargetFragment(this, COMMENTS_REQUEST_CODE)
+            dialog.show(parentFragmentManager, "CommentsDialog")
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         getOrders()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            COMMENTS_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val comments = data?.getStringExtra("comments")
+                    binding.commentText.visibility = View.VISIBLE
+                    binding.commentText.text = comments
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val COMMENTS_REQUEST_CODE = 1
     }
 }

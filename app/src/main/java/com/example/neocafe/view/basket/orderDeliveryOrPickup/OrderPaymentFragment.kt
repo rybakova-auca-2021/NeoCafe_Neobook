@@ -104,6 +104,7 @@ class OrderPaymentFragment : Fragment() {
             withContext(Dispatchers.Main) {
                 if (orders.isNotEmpty()) {
                     val orderItems = orders.map { OrderItem(it.id, it.quantity) }
+                    val cutleryQuantity = arguments?.getInt("orderQuantity") ?: 0
                     val order = Utils.userId?.let {
                         Order(
                             products = orderItems,
@@ -122,7 +123,7 @@ class OrderPaymentFragment : Fragment() {
                             },
                             comment = binding.etComment.text.toString(),
                             pickup_branch = if (binding.constraintDelivery.visibility != View.VISIBLE) 1 else 0,
-                            cutlery = if (binding.constraintDelivery.visibility == View.VISIBLE) 1 else 0,
+                            cutlery = cutleryQuantity,
                             qr_code =  "",
                             use_bonus = binding.etBonuses.text.toString(),
                             coupon_code = binding.etPromocode.text.toString()

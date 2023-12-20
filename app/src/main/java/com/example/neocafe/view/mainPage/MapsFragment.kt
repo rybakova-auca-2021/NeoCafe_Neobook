@@ -2,6 +2,7 @@ package com.example.neocafe.view.mainPage
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -56,14 +58,15 @@ class MapsFragment : Fragment() {
         } else {
             requestLocationPermission()
         }
-
-        val bishkek = LatLng(42.811147, 74.627617)
+//        val customMarkerBitmap = BitmapFactory.decodeResource(resources, R.drawable.marker)
+//        val customMarkerIcon = BitmapDescriptorFactory.fromBitmap(customMarkerBitmap)
+        val bishkek = LatLng(42.875901469124514, 74.60371251208278)
         val cameraPosition = CameraPosition.Builder()
             .target(bishkek)
             .zoom(13.0f)
             .build()
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-        googleMap.addMarker(MarkerOptions().position(bishkek).title("Marker in Bishkek"))
+        //googleMap.addMarker(MarkerOptions().position(bishkek).title("Marker in Bishkek").icon(customMarkerIcon))
 
         // Call getBranches to add markers for branches
         getBranches()
@@ -122,7 +125,11 @@ class MapsFragment : Fragment() {
         viewModel.getAllBranches { branches ->
             branches.forEach { branch ->
                 val branchLocation = LatLng(branch.latitude.toDouble(), branch.longitude.toDouble())
-                val marker = googleMap?.addMarker(MarkerOptions().position(branchLocation).title(branch.address))
+                val customMarkerBitmap = BitmapFactory.decodeResource(resources, R.drawable.marker)
+                val customMarkerIcon = BitmapDescriptorFactory.fromBitmap(customMarkerBitmap)
+
+
+                val marker = googleMap?.addMarker(MarkerOptions().position(branchLocation).title(branch.address).icon(customMarkerIcon))
 
                 marker?.tag = branch
 

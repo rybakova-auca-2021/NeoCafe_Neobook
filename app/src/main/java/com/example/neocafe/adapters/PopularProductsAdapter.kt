@@ -13,8 +13,12 @@ import com.example.neocafe.databinding.CardItemHeaderBinding
 import com.example.neocafe.databinding.CardPopularItemsBinding
 import com.example.neocafe.model.Product
 import com.example.neocafe.model.ProductCategory
+import com.example.neocafe.room.ProductDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
-class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PopularProductsAdapter(private var items: List<Any>, private val productDao: ProductDao) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_HEADER = 0
     private val VIEW_TYPE_PRODUCT = 1
 
@@ -66,6 +70,28 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
             is ProductViewHolder -> {
                 val product = items[position] as Product
                 holder.bind(product)
+                val isProductInRoom = runBlocking {
+                    withContext(Dispatchers.IO) {
+                        productDao.getProductById(product.id) != null
+                    }
+                }
+                holder.binding.btnAdd.visibility = if (isProductInRoom) View.GONE else View.VISIBLE
+                holder.binding.cardAdded.visibility = if (isProductInRoom) View.VISIBLE else View.GONE
+                holder.binding.btnPlus.setOnClickListener {
+                    updateQuantity(holder, product.quantity + 1, product)
+                }
+                holder.binding.btnMinus.setOnClickListener {
+                    updateQuantity(holder, product.quantity - 1, product)
+                }
+            }
+        }
+    }
+
+    private fun updateQuantity(holder: ProductViewHolder, quantity: Int, product: Product) {
+        holder.binding.quantityText.text = quantity.toString()
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                productDao.updateProductQuantity(quantity, product.id)
             }
         }
     }
@@ -89,7 +115,7 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
         }
     }
 
-    inner class ProductViewHolder(private val binding: CardPopularItemsBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ProductViewHolder(val binding: CardPopularItemsBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
                 val position = adapterPosition
@@ -105,6 +131,8 @@ class PopularProductsAdapter(private var items: List<Any>) : RecyclerView.Adapte
                     val clickedItem = items[position]
                     (clickedItem as? Product)?.let { itemClickListener?.onAddClick(it) }
                 }
+                binding.btnAdd.visibility = View.GONE
+                binding.cardAdded.visibility = View.VISIBLE
             }
         }
 

@@ -64,7 +64,7 @@ class PopularPageFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
 
-        productsAdapter = PopularProductsAdapter(emptyList())
+        productsAdapter = PopularProductsAdapter(emptyList(), productDao)
         val layoutManager = GridLayoutManager(requireContext(), 2)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {

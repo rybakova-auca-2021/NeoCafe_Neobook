@@ -98,7 +98,7 @@ class MainPageFragment : Fragment() {
     }
 
     private fun setupAdapters() {
-        adapter = PopularMainAdapter(emptyList())
+        adapter = PopularMainAdapter(emptyList(), productDao)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
 

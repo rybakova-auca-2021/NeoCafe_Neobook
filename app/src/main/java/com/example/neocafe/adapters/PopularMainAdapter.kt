@@ -1,6 +1,7 @@
 package com.example.neocafe.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,8 +11,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.neocafe.databinding.CardPopularItemsBinding
 import com.example.neocafe.model.Product
+import com.example.neocafe.room.ProductDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
-class PopularMainAdapter(private var popularItems: List<Product>) :
+class PopularMainAdapter(private var popularItems: List<Product>, private val productDao: ProductDao) :
     RecyclerView.Adapter<PopularMainAdapter.ArticleViewHolder>() {
 
     private var itemClickListener: OnItemClickListener? = null
@@ -35,6 +40,29 @@ class PopularMainAdapter(private var popularItems: List<Product>) :
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val product = popularItems[position]
         holder.bind(product)
+
+        val isProductInRoom = runBlocking {
+            withContext(Dispatchers.IO) {
+                productDao.getProductById(product.id) != null
+            }
+        }
+        holder.binding.btnAdd.visibility = if (isProductInRoom) View.GONE else View.VISIBLE
+        holder.binding.cardAdded.visibility = if (isProductInRoom) View.VISIBLE else View.GONE
+        holder.binding.btnPlus.setOnClickListener {
+            updateQuantity(holder, product.quantity + 1, product)
+        }
+        holder.binding.btnMinus.setOnClickListener {
+            updateQuantity(holder, product.quantity - 1, product)
+        }
+    }
+
+    private fun updateQuantity(holder: ArticleViewHolder, quantity: Int, product: Product) {
+        holder.binding.quantityText.text = quantity.toString()
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                productDao.updateProductQuantity(quantity, product.id)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -52,7 +80,7 @@ class PopularMainAdapter(private var popularItems: List<Product>) :
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class ArticleViewHolder(private val binding: CardPopularItemsBinding) :
+    inner class ArticleViewHolder(val binding: CardPopularItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -70,7 +98,8 @@ class PopularMainAdapter(private var popularItems: List<Product>) :
                     val clickedItem = popularItems[position]
                     (clickedItem as? Product)?.let { itemClickListener?.onAddClick(it) }
                 }
-                binding.btnAdd.text = "Добавлено"
+                binding.btnAdd.visibility = View.GONE
+                binding.cardAdded.visibility = View.VISIBLE
             }
         }
 

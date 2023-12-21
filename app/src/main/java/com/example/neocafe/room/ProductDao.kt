@@ -16,4 +16,11 @@ interface ProductDao {
 
     @Delete
     fun deleteProducts(products: List<Product>)
+
+
+    @Query("SELECT * FROM ProductDB WHERE id = :productId")
+    suspend fun getProductById(productId: Int): Product?
+
+    @Query("UPDATE ProductDB SET quantity = :newQuantity WHERE id = :productId")
+    suspend fun updateProductQuantity(newQuantity: Int, productId: Int)
 }

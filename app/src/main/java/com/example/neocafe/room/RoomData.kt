@@ -15,5 +15,6 @@ data class Product(
     val category: Int,
     val image: String?,
     val quantity: Int,
-    val price: String
+    val price: String,
+    var isInCart: Boolean = false
 ) : Parcelable

@@ -43,7 +43,7 @@ class OrderConfirmationFragment : BottomSheetDialogFragment() {
         setupNavigation()
 
         val totalPrice = arguments?.getString("totalPrice")
-        val cutleryAmount = arguments?.getInt("cutleryAmount", 0)
+        val cutleryAmount = arguments?.getInt("cutleryAmount")
         val comment = arguments?.getString("comment")
         val orderNumber = arguments?.getInt("orderNumber")
         binding.orderPrice.text = "$totalPrice"

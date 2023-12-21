@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.util.Util
 import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.adapters.OrdersAdapter
@@ -29,7 +30,7 @@ class NewOrderFragment : Fragment() {
     private lateinit var binding: FragmentNewOrderBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: OrdersAdapter
-    private var orderQuantity = 0
+    private var cutleryQuantity = 0
     private val productDao: ProductDao by lazy {
         (requireActivity().application as MyApplication).database.productDao()
     }
@@ -63,14 +64,14 @@ class NewOrderFragment : Fragment() {
         }
 
         binding.btnPlus.setOnClickListener {
-            orderQuantity++
-            binding.orderQuantity.text = orderQuantity.toString()
+            cutleryQuantity++
+            binding.orderQuantity.text = cutleryQuantity.toString()
         }
 
         binding.btnMinus.setOnClickListener {
-            if (orderQuantity > 0) {
-                orderQuantity--
-                binding.orderQuantity.text = orderQuantity.toString()
+            if (cutleryQuantity > 0) {
+                cutleryQuantity--
+                binding.orderQuantity.text = cutleryQuantity.toString()
             }
         }
     }
@@ -87,10 +88,9 @@ class NewOrderFragment : Fragment() {
         }
         binding.btnNext.setOnClickListener {
             if (Utils.access != null) {
-                val bundle = Bundle().apply {
-                    putInt("orderQuantity", orderQuantity)
-                }
-                findNavController().navigate(R.id.orderPaymentFragment, bundle)
+                Utils.cutlery = cutleryQuantity
+                Utils.comment = binding.commentText.text.toString()
+                findNavController().navigate(R.id.orderPaymentFragment)
             } else {
                 val bottomSheetFragment = OrderPhoneFragment()
                 bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)

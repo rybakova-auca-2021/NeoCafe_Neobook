@@ -1,5 +1,7 @@
 package com.example.neocafe.view.basket.OrderBranches
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,7 +17,9 @@ import com.example.neocafe.databinding.FragmentBasket2Binding
 import com.example.neocafe.room.MyApplication
 import com.example.neocafe.room.Product
 import com.example.neocafe.room.ProductDao
+import com.example.neocafe.view.basket.NewOrderFragment
 import com.example.neocafe.view.basket.orderDeliveryOrPickup.OrderPhoneFragment
+import com.example.neocafe.view.basket.orderDeliveryOrPickup.SetupCommentDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +29,7 @@ class BasketFragment : Fragment() {
     private lateinit var binding: FragmentBasket2Binding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: OrdersAdapter
+    private var cutleryQuantity = 0
     private val productDao: ProductDao by lazy {
         (requireActivity().application as MyApplication).database.productDao()
     }
@@ -43,6 +48,28 @@ class BasketFragment : Fragment() {
         setupRecyclerView()
         getOrders()
         setupNavigation()
+        setupCommentDialog()
+        binding.switch1.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.cardClutery.visibility = View.VISIBLE
+                binding.appliences.visibility = View.GONE
+            } else {
+                binding.cardClutery.visibility = View.GONE
+                binding.appliences.visibility = View.VISIBLE
+            }
+        }
+
+        binding.btnPlus.setOnClickListener {
+            cutleryQuantity++
+            binding.orderQuantity.text = cutleryQuantity.toString()
+        }
+
+        binding.btnMinus.setOnClickListener {
+            if (cutleryQuantity > 0) {
+                cutleryQuantity--
+                binding.orderQuantity.text = cutleryQuantity.toString()
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -53,7 +80,11 @@ class BasketFragment : Fragment() {
 
     private fun setupNavigation() {
         binding.btnCheckout.setOnClickListener {
-            findNavController().navigate(R.id.orderPaymentBranchFragment)
+            val bundle = Bundle().apply {
+                putInt("orderQuantity", cutleryQuantity)
+                putString("comment", binding.commentText.text.toString())
+            }
+            findNavController().navigate(R.id.orderPaymentBranchFragment, bundle)
         }
     }
     private fun getOrders() {
@@ -77,4 +108,28 @@ class BasketFragment : Fragment() {
         return totalPrice
     }
 
+    private fun setupCommentDialog() {
+        binding.cardComment.setOnClickListener {
+            val dialog = SetupCommentDialog()
+            dialog.setTargetFragment(this, NewOrderFragment.COMMENTS_REQUEST_CODE)
+            dialog.show(parentFragmentManager, "CommentsDialog")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            COMMENTS_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val comments = data?.getStringExtra("comments")
+                    binding.commentText.visibility = View.VISIBLE
+                    binding.commentText.text = comments
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val COMMENTS_REQUEST_CODE = 1
+    }
 }

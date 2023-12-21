@@ -410,6 +410,19 @@
                         app:layout_constraintStart_toStartOf="@+id/bonuses_text"
                         app:layout_constraintTop_toBottomOf="@+id/bonuses_text" />
 
+                    <TextView
+                        android:id="@+id/promoCodeDiscountText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(-5%)"
+                        android:visibility="gone"
+                        android:textColor="@color/main_orange"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_promocode"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_promocode"
+                        app:layout_constraintTop_toTopOf="@+id/et_promocode" />
+
+
                     <EditText
                         android:id="@+id/et_bonuses"
                         style="@style/EditTextStyle"
@@ -423,6 +436,18 @@
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="@+id/bonuses_text"
                         app:layout_constraintTop_toBottomOf="@+id/et_promocode" />
+
+                    <TextView
+                        android:id="@+id/bonusesDiscountText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(-1000 c)"
+                        android:textColor="@color/main_orange"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/et_bonuses"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_promocode2"
+                        app:layout_constraintTop_toTopOf="@+id/et_bonuses" />
 
                     <EditText
                         android:id="@+id/et_change"
@@ -480,6 +505,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:text="1160 c"
+                        android:visibility="visible"
                         android:textSize="24sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -497,6 +523,56 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_price"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="16dp"
+                        app:cardElevation="0dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" >
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/new_price"
+                                style="@style/TitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="200 c"
+                                android:textSize="24sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/old_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_bold"
+                                android:text="1040 c"
+                                android:textSize="20sp"
+                                app:layout_constraintEnd_toEndOf="@+id/new_price"
+                                app:layout_constraintStart_toStartOf="@+id/new_price"
+                                app:layout_constraintTop_toBottomOf="@+id/new_price" />
+
+                            <ImageView
+                                android:id="@+id/imageView27"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/vector_3"
+                                app:layout_constraintBottom_toBottomOf="@+id/old_price"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/new_price" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

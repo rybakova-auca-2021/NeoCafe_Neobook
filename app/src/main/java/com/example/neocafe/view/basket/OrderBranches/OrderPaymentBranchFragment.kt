@@ -51,9 +51,11 @@ class OrderPaymentBranchFragment : Fragment() {
             val address = arguments?.getString(ARG_BRANCH_ADDRESS)
             binding.etBranch.setText(address)
         }
+        val cutleryQuantity = arguments?.getInt("orderQuantity") ?: 0
+        val comment = arguments?.getString("comment") ?: ""
 
         binding.button.setOnClickListener {
-            postOrders()
+            postOrders(cutleryQuantity, comment)
         }
         setupBranchPage()
         setupPromocodeDialog()
@@ -67,14 +69,12 @@ class OrderPaymentBranchFragment : Fragment() {
         }
     }
 
-    private fun postOrders() {
-        Log.d("OrderPaymentBranchFragment", "postOrders() called")
+    private fun postOrders(cutleryAmount: Int, comment: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val orders = productDao.getAllCartItems()
             withContext(Dispatchers.Main) {
                 if (orders.isNotEmpty()) {
                     val orderItems = orders.map { OrderItem(it.id, it.quantity) }
-                    Log.d("OrderPaymentBranchFragment", "$orderItems")
                     val order = Utils.userId?.let {
                         Order(
                             products = orderItems,
@@ -87,9 +87,9 @@ class OrderPaymentBranchFragment : Fragment() {
                             floor = "",
                             phone = binding.etPhonePickup.text.toString(),
                             change_from = 0,
-                            comment = "",
+                            comment = comment,
                             pickup_branch =  1,
-                            cutlery =  0,
+                            cutlery =  cutleryAmount,
                             qr_code =  "",
                             use_bonus = binding.etBonuses.text.toString(),
                             coupon_code = binding.etPromocode.text.toString()

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -65,6 +67,8 @@ class OrderPaymentFragment : Fragment() {
         setupBonusesDialog()
         setupCommentDialog()
         setupNavigation()
+        binding.etPromocode.addTextChangedListener(promocodeTextWatcher)
+        binding.etBonuses.addTextChangedListener(bonusesTextWatcher)
     }
 
     private fun setupNavigation() {
@@ -105,30 +109,31 @@ class OrderPaymentFragment : Fragment() {
             withContext(Dispatchers.Main) {
                 if (orders.isNotEmpty()) {
                     val orderItems = orders.map { OrderItem(it.id, it.quantity) }
-                    val cutleryQuantity = arguments?.getInt("orderQuantity") ?: 0
                     val order = Utils.userId?.let {
-                        Order(
-                            products = orderItems,
-                            user = it,
-                            delivery_type = if (binding.constraintDelivery.visibility == View.VISIBLE) "delivery" else "pickup",
-                            address = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etAddress.text.toString() else "",
-                            apartment = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etApartment.text.toString() else "",
-                            intercom_code = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etCode.text.toString() else "",
-                            entrance = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etEntrance.text.toString() else "",
-                            floor = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etFloor.text.toString() else "",
-                            phone = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etPhone.text.toString() else "",
-                            change_from = try {
-                                binding.etChange.text.toString().toInt()
-                            } catch (e: NumberFormatException) {
-                                0
-                            },
-                            comment = binding.etComment.text.toString(),
-                            pickup_branch = if (binding.constraintDelivery.visibility != View.VISIBLE) 1 else 0,
-                            cutlery = cutleryQuantity,
-                            qr_code =  "",
-                            use_bonus = binding.etBonuses.text.toString(),
-                            coupon_code = binding.etPromocode.text.toString()
-                        )
+                        Utils.cutlery?.let { it1 ->
+                            Order(
+                                products = orderItems,
+                                user = it,
+                                delivery_type = if (binding.constraintDelivery.visibility == View.VISIBLE) "delivery" else "pickup",
+                                address = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etAddress.text.toString() else "",
+                                apartment = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etApartment.text.toString() else "",
+                                intercom_code = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etCode.text.toString() else "",
+                                entrance = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etEntrance.text.toString() else "",
+                                floor = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etFloor.text.toString() else "",
+                                phone = if (binding.constraintDelivery.visibility == View.VISIBLE) binding.etPhone.text.toString() else "",
+                                change_from = try {
+                                    binding.etChange.text.toString().toInt()
+                                } catch (e: NumberFormatException) {
+                                    0
+                                },
+                                comment = Utils.comment,
+                                pickup_branch = if (binding.constraintDelivery.visibility != View.VISIBLE) 1 else 0,
+                                cutlery = it1,
+                                qr_code =  "",
+                                use_bonus = binding.etBonuses.text.toString(),
+                                coupon_code = binding.etPromocode.text.toString()
+                            )
+                        }
                     }
                     if (order != null) {
                         postOrder(order)
@@ -150,6 +155,23 @@ class OrderPaymentFragment : Fragment() {
             }
         }
     }
+
+    private fun getOrdersWithNewPrice() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val orders = productDao.getAllCartItems()
+            val bonusesDialog = binding.etBonuses.text.toString()
+            val promocode = binding.etPromocode.text.toString()
+            withContext(Dispatchers.Main) {
+                if (orders.isNotEmpty() && bonusesDialog.isNotEmpty() && promocode.isNotEmpty()) {
+                    binding.totalPrice.visibility = View.GONE
+                    binding.cardPrice.visibility = View.VISIBLE
+                    val totalPrice = calculateNewTotalPrice(orders)
+                    binding.totalPrice.text = "$totalPrice c"
+                }
+            }
+        }
+    }
+
     private fun calculateTotalPrice(orders: List<Product>): Double {
         var totalPrice = 0.00
         for (order in orders) {
@@ -158,12 +180,24 @@ class OrderPaymentFragment : Fragment() {
         return totalPrice
     }
 
+    private fun calculateNewTotalPrice(orders: List<Product>): Double {
+        var totalPrice = calculateTotalPrice(orders)
+        binding.oldPrice.text = "$totalPrice c"
+        val bonuses = binding.etBonuses.text.toString().toDoubleOrNull() ?: 0.0
+        totalPrice *= 0.95
+        totalPrice -= bonuses
+        binding.newPrice.text = "$totalPrice c"
+        return totalPrice
+    }
+
+
+
     private fun postOrder(order: Order) {
         viewModel.postOrder(order) { postedOrder ->
             val bundle = Bundle()
             bundle.putString("totalPrice", binding.totalPrice.text.toString())
-            bundle.putString("comment", order.comment)
-            bundle.putInt("cutleryAmount", order.cutlery)
+            bundle.putString("comment", postedOrder.comment)
+            bundle.putInt("cutleryAmount", postedOrder.cutlery)
             bundle.putInt("orderNumber", postedOrder.order_number)
 
             val bottomSheetFragment = OrderConfirmationFragment()
@@ -211,12 +245,15 @@ class OrderPaymentFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     val bonusCode = data?.getStringExtra("bonusCode")
                     binding.etPromocode.setText(bonusCode)
+                    binding.promoCodeDiscountText.visibility = View.VISIBLE
                 }
             }
             BONUSES_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val bonuses = data?.getStringExtra("bonuses")
                     binding.etBonuses.setText(bonuses)
+                    binding.bonusesDiscountText.text = "(-${bonuses} c)"
+                    binding.bonusesDiscountText.visibility = View.VISIBLE
                 }
             }
             COMMENTS_REQUEST_CODE -> {
@@ -235,11 +272,38 @@ class OrderPaymentFragment : Fragment() {
         }
     }
 
+    private val promocodeTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            getOrdersWithNewPrice()
+        }
+    }
+
+    private val bonusesTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            getOrdersWithNewPrice()
+        }
+    }
+
+
     companion object {
         const val PROMOCODE_REQUEST_CODE = 1
         const val BONUSES_REQUEST_CODE = 2
         const val COMMENTS_REQUEST_CODE = 3
         const val ADDRESS_REQUEST_CODE = 4
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.etPromocode.removeTextChangedListener(promocodeTextWatcher)
+        binding.etBonuses.removeTextChangedListener(bonusesTextWatcher)
     }
 
 

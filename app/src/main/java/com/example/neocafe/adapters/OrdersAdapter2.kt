@@ -33,7 +33,7 @@ class OrdersAdapter2 : RecyclerView.Adapter<OrdersAdapter2.OrderViewHolder>() {
         fun bind(order: Product) {
             binding.orderTitle.text = order.title
             binding.orderPrice.text = "${order.price} c"
-            binding.orderPrice.text = order.price.toString()
+            binding.orderQuantity.text = "${order.quantity} шт"
 
             Glide.with(itemView.context)
                 .load(order.image)

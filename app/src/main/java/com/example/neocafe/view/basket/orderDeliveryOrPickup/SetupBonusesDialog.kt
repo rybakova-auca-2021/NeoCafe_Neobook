@@ -11,13 +11,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.neocafe.R
 import com.example.neocafe.databinding.DialogBonusesBinding
+import com.example.neocafe.room.MyApplication
+import com.example.neocafe.room.Product
+import com.example.neocafe.room.ProductDao
 import com.example.neocafe.viewModel.BonusesViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SetupBonusesDialog : DialogFragment() {
+class SetupBonusesDialog() : DialogFragment() {
     private val bonusesViewModel: BonusesViewModel by viewModels()
     private lateinit var binding: DialogBonusesBinding
+    private val productDao: ProductDao by lazy {
+        (requireActivity().application as MyApplication).database.productDao()
+    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -61,6 +72,13 @@ class SetupBonusesDialog : DialogFragment() {
             }
         }
     }
+    private fun calculateTotalPrice(orders: List<Product>): Double {
+        var totalPrice = 0.00
+        for (order in orders) {
+            totalPrice += order.price.toDouble()
+        }
+        return totalPrice
+    }
 
     private fun getBonuses() {
         bonusesViewModel.getBonusesAmount(
@@ -70,21 +88,45 @@ class SetupBonusesDialog : DialogFragment() {
                 binding.bonusesAmount.text = bonus.amount
                 binding.btnConfirmBonus.setOnClickListener {
                     val bonusCode = binding.etBonuses.text.toString()
-                    if (bonusCode > bonus.amount) {
+
+                    if (bonusCode.isEmpty()) {
                         binding.errorMsg.visibility = View.VISIBLE
-                        binding.bonusesAmount.visibility = View.GONE
-                        binding.bonusImg.visibility = View.GONE
-                        binding.bonusesAmountText.visibility = View.GONE
-                        val orange = resources.getColor(R.color.main_orange)
-                        binding.etBonuses.setTextColor(orange)
                     } else {
-                        targetFragment?.onActivityResult(
-                            targetRequestCode,
-                            Activity.RESULT_OK,
-                            Intent().apply {
-                                putExtra("bonuses", bonusCode)
-                            })
-                        dismiss()
+                        val enteredBonuses = bonusCode.toDouble()
+
+                        if (enteredBonuses > bonus.amount.toDouble()) {
+                            binding.errorMsg.visibility = View.VISIBLE
+                            binding.bonusesAmount.visibility = View.GONE
+                            binding.bonusImg.visibility = View.GONE
+                            binding.bonusesAmountText.visibility = View.GONE
+                            val orange = resources.getColor(R.color.main_orange)
+                            binding.etBonuses.setTextColor(orange)
+                        } else {
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                val orders = productDao.getAllCartItems()
+                                if (orders.isNotEmpty()) {
+                                    val totalPrice = calculateTotalPrice(orders)
+
+                                    if (enteredBonuses < totalPrice) {
+                                        binding.errorMsg.visibility = View.GONE
+                                        targetFragment?.onActivityResult(
+                                            targetRequestCode,
+                                            Activity.RESULT_OK,
+                                            Intent().apply {
+                                                putExtra("bonuses", bonusCode)
+                                            })
+                                        dismiss()
+                                    } else {
+                                        binding.errorMsg2.visibility = View.VISIBLE
+                                        binding.bonusesAmount.visibility = View.GONE
+                                        binding.bonusImg.visibility = View.GONE
+                                        binding.bonusesAmountText.visibility = View.GONE
+                                        val orange = resources.getColor(R.color.main_orange)
+                                        binding.etBonuses.setTextColor(orange)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -127,7 +127,7 @@ class OrderPaymentFragment : Fragment() {
                                     0
                                 },
                                 comment = Utils.comment,
-                                pickup_branch = if (binding.constraintDelivery.visibility != View.VISIBLE) 1 else 0,
+                                pickup_branch = if (binding.constraintDelivery.visibility != View.VISIBLE) 1 else 1,
                                 cutlery = it1,
                                 qr_code =  "",
                                 use_bonus = binding.etBonuses.text.toString(),

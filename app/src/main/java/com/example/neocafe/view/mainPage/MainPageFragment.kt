@@ -1,6 +1,8 @@
 package com.example.neocafe.view.mainPage
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +30,8 @@ import com.example.neocafe.viewModel.BonusesViewModel
 import com.example.neocafe.viewModel.GetBranchesViewModel
 import com.example.neocafe.viewModel.GetProductsViewModel
 import com.example.neocafe.viewModel.GetPromotionsViewModel
+import com.example.neocafe.viewModel.NotificationViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,6 +48,7 @@ class MainPageFragment : Fragment() {
     private val promotionViewModel: GetPromotionsViewModel by viewModels()
     private val branchViewModel: GetBranchesViewModel by viewModels()
     private val bonusesViewModel: BonusesViewModel by viewModels()
+    private val notificationViewModel: NotificationViewModel by viewModels()
     private val productDao: ProductDao by lazy {
         (requireActivity().application as MyApplication).database.productDao()
     }
@@ -62,6 +67,22 @@ class MainPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful && task.result != null) {
+                    val token = task.result
+                    val title = "Горячие акции на горячие напитки"
+                    val body = "Дорогие наши гости рады вам сообщить что в такой холодную погоду у нас идет акции на горячие напитки"
+                    Log.d(ContentValues.TAG, "FCM Token: $token")
+
+                    notificationViewModel.sendNotification(
+                        title, body, token
+                    )
+                } else {
+                    Log.w(ContentValues.TAG, "Error getting FCM token", task.exception)
+                }
+            }
         setupNavigation()
         setupAdapters()
         getProducts()

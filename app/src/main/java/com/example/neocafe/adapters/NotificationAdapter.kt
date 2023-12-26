@@ -1,6 +1,10 @@
 package com.example.neocafe.adapters
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,9 +14,17 @@ import com.example.neocafe.model.Notification
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NotificationsAdapter(private var notifications: List<Notification>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NotificationsAdapter(private var notifications: List<Notification>,  private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val readNotificationIds = mutableSetOf<Int>()
+
     private val VIEW_TYPE_DATE_HEADER = 0
     private val VIEW_TYPE_NOTIFICATION = 1
+    private val PREFS_NAME = "NotificationPrefs"
+
+    init {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        readNotificationIds.addAll(prefs.getStringSet("readNotificationIds", setOf())?.map { it.toInt() } ?: emptySet())
+    }
 
     private var itemClickListener: OnItemClickListener? = null
 
@@ -99,6 +111,24 @@ class NotificationsAdapter(private var notifications: List<Notification>) : Recy
         return parsedDate != null && sdf.format(currentDate) == sdf.format(parsedDate)
     }
 
+    fun markNotificationAsReadById(notificationId: Int) {
+        val position = notifications.indexOfFirst { it.id == notificationId }
+        if (position != -1) {
+            readNotificationIds.add(notificationId)
+            saveReadNotificationIdsToPrefs()
+            notifyItemChanged(position)
+            Log.d("NotificationsAdapter", "Marked notification $notificationId as read")
+        } else {
+            Log.e("NotificationsAdapter", "Notification $notificationId not found")
+        }
+    }
+
+    private fun saveReadNotificationIdsToPrefs() {
+        val prefs: SharedPreferences.Editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
+        prefs.putStringSet("readNotificationIds", readNotificationIds.map { it.toString() }.toSet())
+        prefs.apply()
+    }
+
     inner class NotificationViewHolder(private val binding: CardNotificationBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
@@ -107,6 +137,7 @@ class NotificationsAdapter(private var notifications: List<Notification>) : Recy
                     val clickedItem = notifications[position]
                     if (clickedItem is Notification) {
                         itemClickListener?.onItemClick(clickedItem)
+                        markNotificationAsReadById(clickedItem.id)
                     }
                 }
             }
@@ -115,8 +146,17 @@ class NotificationsAdapter(private var notifications: List<Notification>) : Recy
         fun bind(notification: Notification) {
             binding.notificationTitle.text = notification.title
             binding.notificationBody.text = notification.body
+
+            if (readNotificationIds.contains(notification.id)) {
+                binding.dotIndicator.visibility = View.GONE
+                Log.e("NotificationsAdapter", "Notification List $readNotificationIds")
+
+            } else {
+                binding.dotIndicator.visibility = View.VISIBLE
+            }
         }
     }
+
 
     class NotificationDiffCallback(
         private val oldList: List<Notification>,

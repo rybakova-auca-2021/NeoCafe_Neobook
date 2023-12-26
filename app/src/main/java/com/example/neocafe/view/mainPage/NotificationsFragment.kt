@@ -1,8 +1,6 @@
 package com.example.neocafe.view.mainPage
 
 import android.app.Dialog
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,18 +18,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.adapters.NotificationsAdapter
-import com.example.neocafe.adapters.PopularProductsAdapter
 import com.example.neocafe.databinding.FragmentNotificationsBinding
 import com.example.neocafe.model.Notification
-import com.example.neocafe.model.Product
 import com.example.neocafe.viewModel.DeleteNotifications
 import com.example.neocafe.viewModel.GetNotificationsViewModel
-import com.example.neocafe.viewModel.NotificationViewModel
-import com.google.firebase.installations.Utils
-import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class NotificationsFragment : Fragment() {
     private lateinit var binding: FragmentNotificationsBinding
@@ -71,7 +60,7 @@ class NotificationsFragment : Fragment() {
         }
     }
     private fun setupAdapter() {
-        adapter = NotificationsAdapter(emptyList())
+        adapter = NotificationsAdapter(emptyList(), requireContext())
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
@@ -79,9 +68,12 @@ class NotificationsFragment : Fragment() {
             override fun onItemClick(notification: Notification) {
                 val bundle = Bundle()
                 bundle.putInt("id", notification.id)
+                adapter.markNotificationAsReadById(notification.id)
+                Log.d("NotificationsFragment", "Clicked on notification ${notification.id}")
                 findNavController().navigate(R.id.action_notificationsFragment_to_detailNotificationFragment, bundle)
             }
         })
+
     }
 
     private fun setupNavigation() {

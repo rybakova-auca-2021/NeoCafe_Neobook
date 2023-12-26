@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "738863487850",
+    "project_id": "coffeshop-316cc",
+    "storage_bucket": "coffeshop-316cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738863487850:android:ebcf8b0f0e772d6ee66313",
+        "android_client_info": {
+          "package_name": "coffeshop.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcJG_ja5dp_BK_Va8GcTt-WKXGQz2-dKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738863487850:android:be894d615ea5745ce66313",
+        "android_client_info": {
+          "package_name": "com.example.neocafe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcJG_ja5dp_BK_Va8GcTt-WKXGQz2-dKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

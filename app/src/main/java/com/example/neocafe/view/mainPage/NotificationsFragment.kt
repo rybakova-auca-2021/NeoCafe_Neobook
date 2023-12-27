@@ -88,6 +88,7 @@ class NotificationsFragment : Fragment() {
     private fun getNotifications() {
         getNotificationViewModel.getAllNotifications () {
                 notification -> adapter.updateData(notification)
+            val notificationsSize = notification.size
             binding.rvNotifications.visibility = View.VISIBLE
             binding.btnClear.visibility = View.VISIBLE
             binding.noNotificationsMsg.visibility = View.GONE
@@ -135,6 +136,7 @@ class NotificationsFragment : Fragment() {
         logoutBtn.setOnClickListener {
             myDialog.dismiss()
             deleteNotifications()
+            adapter.clearAllNotifications()
         }
 
         dialogView.setOnClickListener {

@@ -12,7 +12,8 @@ import com.example.neocafe.databinding.CardNotificationBinding
 import com.example.neocafe.databinding.ItemHeaderBinding
 import com.example.neocafe.model.Notification
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class NotificationsAdapter(private var notifications: List<Notification>,  private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val readNotificationIds = mutableSetOf<Int>()
@@ -123,10 +124,22 @@ class NotificationsAdapter(private var notifications: List<Notification>,  priva
         }
     }
 
+    fun clearAllNotifications() {
+        readNotificationIds.clear()
+        saveReadNotificationIdsToPrefs()
+        Log.e("NotificationsAdapter", "Notification List after deletion $readNotificationIds")
+
+    }
+
     private fun saveReadNotificationIdsToPrefs() {
         val prefs: SharedPreferences.Editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
         prefs.putStringSet("readNotificationIds", readNotificationIds.map { it.toString() }.toSet())
         prefs.apply()
+    }
+
+    fun getReadNotificationsSize(): Int {
+        Log.e("NotificationsAdapter", "Read Notification List size ${readNotificationIds.size}")
+        return readNotificationIds.size
     }
 
     inner class NotificationViewHolder(private val binding: CardNotificationBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -149,8 +162,6 @@ class NotificationsAdapter(private var notifications: List<Notification>,  priva
 
             if (readNotificationIds.contains(notification.id)) {
                 binding.dotIndicator.visibility = View.GONE
-                Log.e("NotificationsAdapter", "Notification List $readNotificationIds")
-
             } else {
                 binding.dotIndicator.visibility = View.VISIBLE
             }

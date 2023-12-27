@@ -51,6 +51,7 @@
             android:id="@+id/btn_notifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/bell_01"
             app:layout_constraintBottom_toBottomOf="@+id/btn_profile"
             app:layout_constraintEnd_toEndOf="parent"
@@ -246,6 +247,30 @@
                     app:layout_constraintTop_toTopOf="@+id/text_branch" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/img_notification"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="-5dp"
+            android:layout_marginEnd="-5dp"
+            android:visibility="gone"
+            android:src="@drawable/dot"
+            app:layout_constraintEnd_toEndOf="@+id/btn_notifications"
+            app:layout_constraintTop_toTopOf="@+id/btn_notifications" />
+
+        <TextView
+            android:id="@+id/text_notification_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+1"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_notification"
+            app:layout_constraintEnd_toEndOf="@+id/img_notification"
+            app:layout_constraintStart_toStartOf="@+id/img_notification"
+            app:layout_constraintTop_toTopOf="@+id/img_notification" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

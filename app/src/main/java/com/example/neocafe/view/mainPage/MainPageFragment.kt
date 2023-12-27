@@ -3,18 +3,18 @@ package com.example.neocafe.view.mainPage
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.adapters.BranchesMainAdapter
+import com.example.neocafe.adapters.NotificationsAdapter
 import com.example.neocafe.adapters.PopularMainAdapter
 import com.example.neocafe.adapters.PromotionsMainAdapter
 import com.example.neocafe.constants.Utils
@@ -25,9 +25,9 @@ import com.example.neocafe.model.Promotion
 import com.example.neocafe.room.MyApplication
 import com.example.neocafe.room.ProductDao
 import com.example.neocafe.view.basket.OrderBranches.DialogBranchFragment
-import com.example.neocafe.view.registration.RegisterFragment
 import com.example.neocafe.viewModel.BonusesViewModel
 import com.example.neocafe.viewModel.GetBranchesViewModel
+import com.example.neocafe.viewModel.GetNotificationsViewModel
 import com.example.neocafe.viewModel.GetProductsViewModel
 import com.example.neocafe.viewModel.GetPromotionsViewModel
 import com.example.neocafe.viewModel.NotificationViewModel
@@ -44,11 +44,13 @@ class MainPageFragment : Fragment() {
     private lateinit var adapter: PopularMainAdapter
     private lateinit var promotionAdapter: PromotionsMainAdapter
     private lateinit var branchAdapter: BranchesMainAdapter
+    private lateinit var notificationsAdapter: NotificationsAdapter
     private val viewModel: GetProductsViewModel by viewModels()
     private val promotionViewModel: GetPromotionsViewModel by viewModels()
     private val branchViewModel: GetBranchesViewModel by viewModels()
     private val bonusesViewModel: BonusesViewModel by viewModels()
-    private val notificationViewModel: NotificationViewModel by viewModels()
+    private val getNotificationViewModel: GetNotificationsViewModel by viewModels()
+
     private val productDao: ProductDao by lazy {
         (requireActivity().application as MyApplication).database.productDao()
     }
@@ -67,22 +69,6 @@ class MainPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful && task.result != null) {
-                    val token = task.result
-                    val title = "Горячие акции на горячие напитки"
-                    val body = "Дорогие наши гости рады вам сообщить что в такой холодную погоду у нас идет акции на горячие напитки"
-                    Log.d(ContentValues.TAG, "FCM Token: $token")
-
-                    notificationViewModel.sendNotification(
-                        title, body, token
-                    )
-                } else {
-                    Log.w(ContentValues.TAG, "Error getting FCM token", task.exception)
-                }
-            }
         setupNavigation()
         setupAdapters()
         getProducts()
@@ -90,6 +76,7 @@ class MainPageFragment : Fragment() {
         getBranches()
         getBonuses()
         setupCart()
+        getNotifications()
     }
 
     private fun setupNavigation() {
@@ -119,6 +106,8 @@ class MainPageFragment : Fragment() {
     }
 
     private fun setupAdapters() {
+        notificationsAdapter = NotificationsAdapter(emptyList(), requireContext())
+
         adapter = PopularMainAdapter(emptyList(), productDao)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
@@ -201,5 +190,19 @@ class MainPageFragment : Fragment() {
                 binding.numOfBonuses.text = bonus.amount
             }
         )
+    }
+
+
+    private fun getNotifications() {
+        getNotificationViewModel.getAllNotifications () {
+                notification ->
+            val notificationsSize = notification.size
+            val readNotificationsSize = notificationsAdapter.getReadNotificationsSize()
+
+            binding.textNotificationNum.visibility = View.VISIBLE
+            binding.imgNotification.visibility = View.VISIBLE
+            binding.textNotificationNum.text = ((notificationsSize - readNotificationsSize) - 1).toString()
+            Log.e("NotificationsAdapter", "Notification size $notificationsSize")
+        }
     }
 }

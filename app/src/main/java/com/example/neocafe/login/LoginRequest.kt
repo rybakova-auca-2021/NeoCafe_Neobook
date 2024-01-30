@@ -1,6 +1,6 @@
-package com.example.neocafe.model
+package com.example.neocafe.login
 
-data class Login(
+data class LoginRequest(
     val phone: String
 )
 

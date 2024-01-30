@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.neocafe.R
 import com.example.neocafe.constants.Utils
 import com.example.neocafe.databinding.FragmentOrderPhoneBinding
-import com.example.neocafe.view.registration.SendCodeFragment
-import com.example.neocafe.viewModel.LoginViewModel
+import com.example.neocafe.login.presentation.LoginViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class OrderPhoneFragment : BottomSheetDialogFragment() {
@@ -49,17 +47,18 @@ class OrderPhoneFragment : BottomSheetDialogFragment() {
 
     private fun login() {
         val phone = binding.etPhone.text.toString()
-        viewModel.login(phone,
-            onSuccess = {
-                dismiss()
-                val bottomSheetFragment = SendCodeOrderFragment()
-                bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
-            },
-            onError = {
-                binding.phoneErrorMsg.visibility = View.VISIBLE
-                binding.etPhone.setTextColor(resources.getColor(R.color.main_orange));
-            }
-        )
+	    viewModel.result.observe(viewLifecycleOwner) {state ->
+		    state.onSuccess {
+			    dismiss()
+			    val bottomSheetFragment = SendCodeOrderFragment()
+			    bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+		    }
+		    state.onFailure {
+			    binding.phoneErrorMsg.visibility = View.VISIBLE
+			    binding.etPhone.setTextColor(resources.getColor(R.color.main_orange));
+		    }
+	    }
+    
     }
 
     private fun setupValidation() {

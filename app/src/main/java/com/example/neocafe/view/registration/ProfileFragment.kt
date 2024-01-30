@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.neocafe.MainActivity
 import com.example.neocafe.R
 import com.example.neocafe.databinding.FragmentProfileBinding
-import com.example.neocafe.view.auth.LoginFragment
+import com.example.neocafe.login.presentation.LoginFragment
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding

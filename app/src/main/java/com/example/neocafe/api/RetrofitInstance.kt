@@ -1,6 +1,7 @@
 package com.example.neocafe.api
 
 import com.example.neocafe.constants.Constant.Companion.BASE_URL
+import com.example.neocafe.login.data.api.AuthApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,7 +27,7 @@ class RetrofitInstance {
         }
 
         val authApi by lazy {
-            retrofit.create(AuthInterface::class.java)
+            retrofit.create(AuthApi::class.java)
         }
 
         val mainApi by lazy {

@@ -45,6 +45,7 @@
             </intent-filter>
         </service>
 
+        <!-- todo: rewrite to single activity -->
 
         <activity
             android:name=".SplashActivity"
